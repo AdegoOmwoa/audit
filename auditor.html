@@ -8,6 +8,10 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="PriceTrack Pro">
+    
+    <!-- Critical for PWA installation -->
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiUHJpY2VUcmFjayBQcm8iLCJzaG9ydF9uYW1lIjoiUHJpY2VUcmFjayIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjZjhmYWZjIiwidGhlbWVfY29sb3IiOiIjMjU2M2ViIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsInNjb3BlIjoiLiIsImljb25zIjpbeyJzcmMiOiJkYXRhOmltYWdlL3N2Zyt4bWwsPHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCAxMDAgMTAwJz48cmVjdCBmaWxsPScjMjU2M2ViJyByeD0nMjAnIHdpZHRoPScxMDAnIGhlaWdodD0nMTAwJy8+PHRleHQgeD0nNTAnIHk9JzY1JyBmb250LXNpemU9JzQwJyB0ZXh0LWFuY2hvcj0nbWlkZGxlJyBmaWxsPSd3aGl0ZScgZm9udC1mYW1pbHk9J0FyaWFsJz5QVDwvdGV4dD48L3N2Zz4iLCJzaXplcyI6IjE5MngxOTIiLCJ0eXBlIjoiaW1hZ2Uvc3ZnK3htbCJ9XX0=">
     
     <title>PriceTrack Pro</title>
     <style>
@@ -36,7 +40,7 @@
             background: var(--bg);
             color: var(--text);
             line-height: 1.6;
-            padding-bottom: 80px;
+            padding-bottom: 100px;
         }
 
         .header {
@@ -60,33 +64,100 @@
             margin-top: 0.25rem;
         }
 
-        .install-btn {
+        /* Install Banner - Always visible until installed */
+        .install-banner {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
+            bottom: 0;
+            left: 0;
+            right: 0;
             background: var(--success);
             color: white;
-            border: none;
-            padding: 1rem 1.5rem;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);
+            padding: 1rem;
             z-index: 1000;
             display: none;
-            animation: pulse 2s infinite;
-            letter-spacing: 0.02em;
+            flex-direction: column;
+            gap: 0.75rem;
+            box-shadow: 0 -4px 12px rgba(0,0,0,0.15);
         }
 
-        .install-btn.show {
+        .install-banner.show {
+            display: flex;
+        }
+
+        .install-banner-header {
             display: flex;
             align-items: center;
+            gap: 0.75rem;
+        }
+
+        .install-banner-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+        }
+
+        .install-banner-text {
+            font-size: 0.85rem;
+            opacity: 0.95;
+            line-height: 1.5;
+        }
+
+        .install-banner-buttons {
+            display: flex;
             gap: 0.5rem;
         }
 
+        .install-btn-main {
+            flex: 2;
+            background: white;
+            color: var(--success);
+            border: none;
+            padding: 0.875rem;
+            border-radius: 8px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .install-btn-secondary {
+            flex: 1;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: none;
+            padding: 0.875rem;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+
+        /* Alternative: Floating Action Button */
+        .fab-install {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 56px;
+            height: 56px;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            font-size: 24px;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);
+            z-index: 999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            animation: pulse 2s infinite;
+        }
+
+        .fab-install.show {
+            display: flex;
+        }
+
         @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
+            0%, 100% { transform: scale(1); box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4); }
+            50% { transform: scale(1.05); box-shadow: 0 6px 20px rgba(5, 150, 105, 0.6); }
         }
 
         .nav {
@@ -112,7 +183,6 @@
             border-radius: 8px;
             font-size: 0.9rem;
             cursor: pointer;
-            transition: all 0.2s;
         }
 
         .nav button.active {
@@ -123,11 +193,11 @@
         .page {
             display: none;
             padding: 0 1rem;
+            animation: fadeIn 0.3s;
         }
 
         .page.active {
             display: block;
-            animation: fadeIn 0.3s;
         }
 
         @keyframes fadeIn {
@@ -147,7 +217,6 @@
             font-size: 1.1rem;
             font-weight: 700;
             margin-bottom: 1rem;
-            color: var(--text);
         }
 
         .form-group {
@@ -159,7 +228,6 @@
             font-weight: 600;
             font-size: 0.85rem;
             margin-bottom: 0.5rem;
-            color: var(--text);
         }
 
         .form-group input {
@@ -168,7 +236,6 @@
             border: 2px solid var(--border);
             border-radius: 10px;
             font-size: 16px;
-            font-family: inherit;
         }
 
         .form-group input:focus {
@@ -185,12 +252,6 @@
             font-size: 1rem;
             cursor: pointer;
             margin-top: 0.5rem;
-            font-family: inherit;
-            transition: transform 0.1s;
-        }
-
-        .btn:active {
-            transform: scale(0.98);
         }
 
         .btn-primary {
@@ -222,7 +283,6 @@
             font-size: 0.7rem;
             color: var(--text-light);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
             margin-bottom: 0.25rem;
         }
 
@@ -243,9 +303,7 @@
             color: var(--text-light);
             font-size: 0.7rem;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
             border-bottom: 2px solid var(--border);
-            font-weight: 600;
         }
 
         td {
@@ -275,7 +333,6 @@
             font-size: 0.8rem;
             font-weight: 600;
             cursor: pointer;
-            font-family: inherit;
         }
 
         .btn-sell {
@@ -290,11 +347,6 @@
 
         .btn-delete {
             background: var(--danger);
-            color: white;
-        }
-
-        .btn-edit {
-            background: var(--primary);
             color: white;
         }
 
@@ -321,22 +373,16 @@
             max-width: 400px;
             border-radius: 20px 20px 0 0;
             padding: 1.5rem;
-            animation: slideUp 0.3s;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
         }
 
         .toast {
             position: fixed;
-            bottom: 100px;
+            top: 50%;
             left: 50%;
-            transform: translateX(-50%);
+            transform: translate(-50%, -50%);
             background: #1e293b;
             color: white;
-            padding: 1rem 1.5rem;
+            padding: 1rem 2rem;
             border-radius: 10px;
             display: none;
             z-index: 3000;
@@ -351,7 +397,6 @@
             text-align: center;
             padding: 3rem;
             color: var(--text-light);
-            font-size: 0.9rem;
         }
 
         .sell-options {
@@ -367,11 +412,6 @@
             padding: 1rem;
             text-align: center;
             cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .sell-option:hover {
-            border-color: var(--primary);
         }
 
         .sell-option.selected {
@@ -379,70 +419,63 @@
             background: #eff6ff;
         }
 
-        .sell-option-title {
-            font-weight: 700;
-            font-size: 1rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .sell-option-sub {
-            font-size: 0.8rem;
-            color: var(--text-light);
-        }
-
-        .instructions {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 1.5rem;
-            border-radius: 16px;
-            box-shadow: 0 20px 25px rgba(0,0,0,0.2);
-            z-index: 3000;
-            display: none;
-            width: 90%;
-            max-width: 320px;
-        }
-
-        .instructions.show {
-            display: block;
-        }
-
-        .instructions h3 {
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-        }
-
-        .instructions ol {
-            margin-left: 1.25rem;
-            line-height: 2;
-            color: var(--text-light);
-            font-size: 0.9rem;
-        }
-
-        .instructions ol li {
-            margin-bottom: 0.5rem;
-        }
-
-        .instructions button {
-            margin-top: 1rem;
-            width: 100%;
-        }
-
-        .overlay {
+        .manual-install-modal {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 2999;
+            background: rgba(0,0,0,0.8);
+            z-index: 5000;
             display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
         }
 
-        .overlay.show {
-            display: block;
+        .manual-install-modal.show {
+            display: flex;
+        }
+
+        .manual-install-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 16px;
+            max-width: 400px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .manual-install-content h2 {
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .step {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            text-align: left;
+        }
+
+        .step-number {
+            width: 40px;
+            height: 40px;
+            background: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            flex-shrink: 0;
+        }
+
+        .step-text {
+            font-size: 1rem;
+            line-height: 1.5;
         }
 
         .info-box {
@@ -453,90 +486,31 @@
             border-left: 4px solid var(--primary);
         }
 
-        .info-box strong {
-            color: var(--primary);
+        .android-icon {
+            width: 60px;
+            height: 60px;
+            margin: 0 auto 1rem;
+            background: var(--success);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 30px;
+            font-weight: 700;
         }
 
-        .close-btn {
+        .close-manual {
             position: absolute;
             top: 1rem;
             right: 1rem;
-            background: none;
+            background: white;
             border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
             font-size: 1.5rem;
             cursor: pointer;
-            color: var(--text-light);
-        }
-
-        .stock-low {
-            color: var(--danger);
-            font-weight: 700;
-        }
-
-        .stock-ok {
-            color: var(--success);
-            font-weight: 700;
-        }
-
-        .text-small {
-            font-size: 0.75rem;
-            color: var(--text-light);
-        }
-
-        .text-muted {
-            color: var(--text-light);
-        }
-
-        .flex {
-            display: flex;
-        }
-
-        .gap-2 {
-            gap: 0.5rem;
-        }
-
-        .items-center {
-            align-items: center;
-        }
-
-        .justify-between {
-            justify-content: space-between;
-        }
-
-        .w-full {
-            width: 100%;
-        }
-
-        .mt-2 {
-            margin-top: 0.5rem;
-        }
-
-        .mb-2 {
-            margin-bottom: 0.5rem;
-        }
-
-        .font-bold {
-            font-weight: 700;
-        }
-
-        .text-lg {
-            font-size: 1.125rem;
-        }
-
-        .text-sm {
-            font-size: 0.875rem;
-        }
-
-        .text-xs {
-            font-size: 0.75rem;
-        }
-
-        .uppercase {
-            text-transform: uppercase;
-        }
-
-        .tracking-wide {
-            letter-spacing: 0.05em;
         }
     </style>
 </head>
@@ -549,19 +523,52 @@
         </div>
     </div>
 
-    <button class="install-btn" id="installBtn" onclick="tryInstall()">
-        Install App
+    <!-- Bottom Install Banner -->
+    <div class="install-banner" id="installBanner">
+        <div class="install-banner-header">
+            <div>
+                <div class="install-banner-title">Install PriceTrack Pro</div>
+                <div class="install-banner-text">Add to your home screen for instant offline access without opening Chrome</div>
+            </div>
+        </div>
+        <div class="install-banner-buttons">
+            <button class="install-btn-main" onclick="installApp()">INSTALL NOW</button>
+            <button class="install-btn-secondary" onclick="dismissInstall()">Later</button>
+        </div>
+    </div>
+
+    <!-- Floating Install Button (alternative) -->
+    <button class="fab-install" id="fabInstall" onclick="installApp()" title="Install App">
+        +
     </button>
 
-    <div class="overlay" id="overlay" onclick="hideInstructions()"></div>
-    <div class="instructions" id="instructions">
-        <h3>Add to Home Screen</h3>
-        <ol id="steps">
-            <li>Tap the <strong>menu button</strong> (three dots) in Chrome</li>
-            <li>Select <strong>"Add to Home screen"</strong></li>
-            <li>Tap <strong>"Add"</strong></li>
-        </ol>
-        <button class="btn btn-primary" onclick="hideInstructions()">Got it</button>
+    <!-- Manual Install Instructions Overlay -->
+    <div class="manual-install-modal" id="manualInstall">
+        <button class="close-manual" onclick="hideManualInstall()">×</button>
+        <div class="manual-install-content">
+            <div class="android-icon">PT</div>
+            <h2>Install PriceTrack Pro</h2>
+            <p style="color: var(--text-light); margin-bottom: 2rem;">Follow these steps to add to your home screen</p>
+            
+            <div class="step">
+                <div class="step-number">1</div>
+                <div class="step-text">Tap the <strong>three dots menu</strong> in the top right corner of Chrome</div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">2</div>
+                <div class="step-text">Scroll down and tap <strong>"Add to Home screen"</strong></div>
+            </div>
+            
+            <div class="step">
+                <div class="step-number">3</div>
+                <div class="step-text">Tap <strong>"Add"</strong> when prompted</div>
+            </div>
+
+            <div style="background: #fef3c7; padding: 1rem; border-radius: 8px; margin-top: 1.5rem; font-size: 0.9rem;">
+                <strong>Tip:</strong> If you don't see "Add to Home screen", look for "Install app" or "Add to Home"
+            </div>
+        </div>
     </div>
 
     <div class="nav">
@@ -610,8 +617,8 @@
                 </div>
                 
                 <div class="info-box">
-                    <span>Total Stock: </span>
-                    <span id="total" class="font-bold text-lg">0 units</span>
+                    <strong>Total Stock: </strong>
+                    <span id="total" style="font-size: 1.2rem; color: var(--primary); font-weight: 700;">0 units</span>
                 </div>
 
                 <div style="display: flex; gap: 0.5rem;">
@@ -622,7 +629,7 @@
         </div>
 
         <div class="card" style="background: #f0fdf4;">
-            <p class="text-sm text-muted">
+            <p style="font-size: 0.9rem; color: var(--text-light);">
                 <strong>Tip:</strong> This app works fully offline. All data is saved locally on your device.
             </p>
         </div>
@@ -684,16 +691,16 @@
         <div class="modal-content">
             <h3 id="mtitle" style="margin-bottom: 0.5rem;">Transaction</h3>
             <p id="mproduct" style="font-weight: 700; margin-bottom: 0.25rem;"></p>
-            <p id="mstock" class="text-muted text-sm" style="margin-bottom: 1rem;"></p>
+            <p id="mstock" style="color: var(--text-light); font-size: 0.85rem; margin-bottom: 1rem;"></p>
             
             <div class="sell-options" id="sopts">
                 <div class="sell-option selected" onclick="setType('unit')">
-                    <div class="sell-option-title">Sell by Unit</div>
-                    <div class="sell-option-sub">Individual items</div>
+                    <div style="font-weight: 700; margin-bottom: 0.25rem;">Sell by Unit</div>
+                    <div style="font-size: 0.8rem; color: var(--text-light);">Individual items</div>
                 </div>
                 <div class="sell-option" onclick="setType('bale')">
-                    <div class="sell-option-title">Sell by Bale</div>
-                    <div class="sell-option-sub">Complete bales</div>
+                    <div style="font-weight: 700; margin-bottom: 0.25rem;">Sell by Bale</div>
+                    <div style="font-size: 0.8rem; color: var(--text-light);">Complete bales</div>
                 </div>
             </div>
 
@@ -702,7 +709,7 @@
                 <input type="number" id="mqty" value="1" min="1" style="text-align: center; font-size: 1.25rem; font-weight: 700;">
             </div>
 
-            <p id="merror" style="color: var(--danger); display: none; margin-bottom: 1rem; font-size: 0.9rem;"></p>
+            <p id="merror" style="color: var(--danger); display: none; margin-bottom: 1rem;"></p>
 
             <div style="display: flex; gap: 0.5rem;">
                 <button class="btn btn-secondary" onclick="closeModal()" style="flex: 1; margin: 0;">Cancel</button>
@@ -718,11 +725,14 @@
         let products = [];
         let current = null;
         let deferredPrompt = null;
+        let installDismissed = false;
 
         function load() {
             try {
                 const d = localStorage.getItem('ptp_data');
                 if (d) products = JSON.parse(d);
+                const dismissed = localStorage.getItem('ptp_install_dismissed');
+                if (dismissed) installDismissed = true;
             } catch(e) { products = []; }
         }
 
@@ -732,91 +742,115 @@
             render();
         }
 
-        // ==================== INSTALL ====================
+        // ==================== INSTALL LOGIC ====================
         
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            showInstallBtn();
-        });
-
-        let clickCount = 0;
-        document.addEventListener('click', () => {
-            clickCount++;
-            if (clickCount === 3 && products.length > 0 && !isStandalone()) {
-                showInstallBtn();
-            }
-        });
-
+        // Check if running as installed PWA
         function isStandalone() {
             return window.matchMedia('(display-mode: standalone)').matches || 
-                   window.navigator.standalone;
+                   window.navigator.standalone === true ||
+                   document.referrer.startsWith('android-app://');
         }
 
-        function showInstallBtn() {
-            if (isStandalone()) return;
-            document.getElementById('installBtn').classList.add('show');
+        // Capture the beforeinstallprompt event
+        window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('beforeinstallprompt captured');
+            e.preventDefault();
+            deferredPrompt = e;
+            showInstallUI();
+        });
+
+        // Show install UI
+        function showInstallUI() {
+            if (isStandalone() || installDismissed) return;
+            
+            // Show bottom banner on mobile
+            if (window.innerWidth < 768) {
+                document.getElementById('installBanner').classList.add('show');
+            } else {
+                document.getElementById('fabInstall').classList.add('show');
+            }
         }
 
-        function tryInstall() {
+        // Try to install
+        function installApp() {
             if (deferredPrompt) {
+                // Native install
                 deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choice) => {
-                    if (choice.outcome === 'accepted') {
-                        toast('App installed successfully');
-                        document.getElementById('installBtn').style.display = 'none';
+                deferredPrompt.userChoice.then((choiceResult) => {
+                    if (choiceResult.outcome === 'accepted') {
+                        console.log('User accepted install');
+                        toast('Installing... Please wait');
+                        hideInstallUI();
+                        // Check if actually installed after delay
+                        setTimeout(() => {
+                            if (isStandalone()) {
+                                toast('App installed! Open from home screen');
+                            }
+                        }, 3000);
+                    } else {
+                        console.log('User dismissed install');
+                        showManualInstall();
                     }
                     deferredPrompt = null;
                 });
             } else {
-                showInstructions();
+                // No native prompt available, show manual instructions
+                showManualInstall();
             }
         }
 
-        function showInstructions() {
-            const ua = navigator.userAgent.toLowerCase();
-            let steps = `
-                <li>Tap the <strong>menu button</strong> (three dots) in Chrome</li>
-                <li>Select <strong>"Add to Home screen"</strong></li>
-                <li>Tap <strong>"Add"</strong></li>
-            `;
-            
-            if (ua.includes('samsung')) {
-                steps = `
-                    <li>Tap <strong>menu</strong> (three dots)</li>
-                    <li>Select <strong>"Add page to"</strong></li>
-                    <li>Choose <strong>"Home screen"</strong></li>
-                `;
-            } else if (ua.includes('firefox')) {
-                steps = `
-                    <li>Tap <strong>menu</strong> (three dots)</li>
-                    <li>Select <strong>"Add to Home screen"</strong></li>
-                `;
-            } else if (/iphone|ipad|ipod/.test(ua)) {
-                steps = `
-                    <li>Tap <strong>Share button</strong> at bottom</li>
-                    <li>Scroll down and tap <strong>"Add to Home Screen"</strong></li>
-                    <li>Tap <strong>"Add"</strong></li>
-                `;
-            }
-            
-            document.getElementById('steps').innerHTML = steps;
-            document.getElementById('instructions').classList.add('show');
-            document.getElementById('overlay').classList.add('show');
+        function showManualInstall() {
+            document.getElementById('manualInstall').classList.add('show');
         }
 
-        function hideInstructions() {
-            document.getElementById('instructions').classList.remove('show');
-            document.getElementById('overlay').classList.remove('show');
+        function hideManualInstall() {
+            document.getElementById('manualInstall').classList.remove('show');
         }
 
-        setTimeout(() => {
-            if (!isStandalone() && products.length > 0) {
-                showInstallBtn();
-            }
-        }, 8000);
+        function hideInstallUI() {
+            document.getElementById('installBanner').classList.remove('show');
+            document.getElementById('fabInstall').classList.remove('show');
+        }
 
-        // ==================== APP ====================
+        function dismissInstall() {
+            installDismissed = true;
+            localStorage.setItem('ptp_install_dismissed', Date.now());
+            hideInstallUI();
+            // Show FAB instead as reminder
+            setTimeout(() => {
+                if (!isStandalone()) {
+                    document.getElementById('fabInstall').classList.add('show');
+                }
+            }, 2000);
+        }
+
+        // Force check after user interaction
+        document.addEventListener('click', function checkInstall() {
+            if (!deferredPrompt && !isStandalone() && !installDismissed && products.length > 0) {
+                // Try to trigger install check
+                if ('BeforeInstallPromptEvent' in window) {
+                    showInstallUI();
+                }
+            }
+        }, { once: true });
+
+        // Periodic check
+        setInterval(() => {
+            if (!isStandalone() && !installDismissed && products.length > 0) {
+                showInstallUI();
+            }
+        }, 30000); // Check every 30 seconds
+
+        // Initial check
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                if (!isStandalone() && !installDismissed) {
+                    showInstallUI();
+                }
+            }, 2000);
+        });
+
+        // ==================== APP FUNCTIONS ====================
         function calc() {
             const upb = parseInt(document.getElementById('upb').value) || 1;
             const b = parseInt(document.getElementById('bales').value) || 0;
@@ -841,6 +875,13 @@
             save();
             toast(`Saved: ${p.name}`);
             clearForm();
+            
+            // Prompt to install after first save
+            if (products.length === 1 && !isStandalone()) {
+                setTimeout(() => {
+                    showManualInstall();
+                }, 1000);
+            }
         }
 
         function clearForm() {
@@ -862,10 +903,10 @@
         }
 
         function formatStock(p) {
-            if (p.bales > 0 && p.units > 0) return `${p.bales} bales ${p.units} units`;
+            if (p.bales > 0 && p.units > 0) return `${p.bales}b ${p.units}u`;
             if (p.bales > 0) return `${p.bales} bales`;
             if (p.units > 0) return `${p.units} units`;
-            return 'Out of stock';
+            return 'Out';
         }
 
         function total(p) {
@@ -886,21 +927,21 @@
             
             tb.innerHTML = data.map(p => {
                 const t = total(p);
-                const stockClass = t === 0 ? 'stock-low' : 'stock-ok';
+                const stockClass = t === 0 ? 'color: var(--danger); font-weight: 700;' : 'font-weight: 700;';
                 
                 return `
                     <tr>
                         <td>
-                            <div class="font-bold">${esc(p.name)}</div>
-                            <div class="text-small text-muted">${p.upb} units per bale</div>
+                            <div style="font-weight: 700;">${esc(p.name)}</div>
+                            <div style="font-size: 0.75rem; color: var(--text-light);">${p.upb} units/bale</div>
                         </td>
                         <td>
-                            <div class="${stockClass}">${formatStock(p)}</div>
-                            <div class="text-small text-muted">${t} total units</div>
+                            <div style="${stockClass}">${formatStock(p)}</div>
+                            <div style="font-size: 0.75rem; color: var(--text-light);">${t} total</div>
                         </td>
                         <td>
-                            <div class="tag">$${p.price.toFixed(2)} / unit</div>
-                            <div class="text-small text-muted mt-2">Bale: $${p.balePrice.toFixed(2)}</div>
+                            <div class="tag">$${p.price.toFixed(2)}</div>
+                            <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 0.25rem;">Bale: $${p.balePrice.toFixed(2)}</div>
                         </td>
                         <td>
                             <div class="actions">
@@ -919,11 +960,10 @@
             current = { id, type: 'sell', sellType: 'unit' };
             document.getElementById('mtitle').textContent = 'Sell Product';
             document.getElementById('mproduct').textContent = p.name;
-            document.getElementById('mstock').textContent = `Current stock: ${formatStock(p)}`;
+            document.getElementById('mstock').textContent = `Stock: ${formatStock(p)}`;
             document.getElementById('sopts').style.display = 'grid';
             document.getElementById('mqty').value = 1;
             document.getElementById('merror').style.display = 'none';
-            setType('unit');
             document.getElementById('modal').classList.add('active');
         }
 
@@ -956,7 +996,7 @@
             const p = products.find(x => x.id === current.id);
             
             if (!qty || qty < 1) {
-                err.textContent = 'Please enter a valid quantity';
+                err.textContent = 'Enter valid quantity';
                 err.style.display = 'block';
                 return;
             }
@@ -965,7 +1005,7 @@
                 if (current.sellType === 'unit') {
                     const avail = total(p);
                     if (qty > avail) {
-                        err.textContent = `Only ${avail} units available`;
+                        err.textContent = `Only ${avail} available`;
                         err.style.display = 'block';
                         return;
                     }
@@ -990,7 +1030,7 @@
                     toast(`Sold ${qty} units`);
                 } else {
                     if (qty > p.bales) {
-                        err.textContent = `Only ${p.bales} bales available`;
+                        err.textContent = `Only ${p.bales} bales`;
                         err.style.display = 'block';
                         return;
                     }
@@ -1024,7 +1064,7 @@
             if (confirm('Delete this product?')) {
                 products = products.filter(p => p.id !== id);
                 save();
-                toast('Product deleted');
+                toast('Deleted');
             }
         }
 
@@ -1034,10 +1074,10 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `pricetrack-backup-${new Date().toISOString().split('T')[0]}.json`;
+            a.download = `pricetrack-${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             URL.revokeObjectURL(url);
-            toast('Data exported');
+            toast('Exported');
         }
 
         function importData(inp) {
@@ -1050,11 +1090,9 @@
                     if (Array.isArray(d)) {
                         products = d;
                         save();
-                        toast(`Imported ${d.length} products`);
+                        toast(`Imported ${d.length} items`);
                     }
-                } catch (err) { 
-                    alert('Invalid file format'); 
-                }
+                } catch (err) { alert('Invalid file'); }
                 inp.value = '';
             };
             r.readAsText(f);
@@ -1073,11 +1111,13 @@
             setTimeout(() => t.classList.remove('show'), 2500);
         }
 
+        // Initialize
         load();
         calc();
         
-        if (products.length > 0) {
-            setTimeout(showInstallBtn, 6000);
+        // If already standalone, hide install UI
+        if (isStandalone()) {
+            console.log('Running as installed app');
         }
     </script>
 </body>
