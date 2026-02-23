@@ -8,14 +8,6 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="PriceTrack Pro">
-    
-    <!-- PWA Manifest -->
-    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiUHJpY2VUcmFjayBQcm8iLCJzaG9ydF9uYW1lIjoiUHJpY2VUcmFjayIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjZjhmYWZjIiwidGhlbWVfY29sb3IiOiIjMjU2M2ViIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImljb25zIjpbXX0=">
-    
-    <!-- Favicon/Icon for PWA -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%232563eb' rx='20' width='100' height='100'/><text x='50' y='65' font-size='50' text-anchor='middle' fill='white'>💰</text></svg>">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%232563eb' rx='20' width='100' height='100'/><text x='50' y='65' font-size='50' text-anchor='middle' fill='white'>💰</text></svg>">
     
     <title>PriceTrack Pro</title>
     <style>
@@ -24,206 +16,165 @@
             padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
-            user-select: none;
-            -webkit-user-select: none;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         }
 
         :root {
             --primary: #2563eb;
             --primary-dark: #1d4ed8;
-            --secondary: #64748b;
             --success: #059669;
             --danger: #dc2626;
             --warning: #d97706;
             --bg: #f8fafc;
-            --card-bg: #ffffff;
+            --card: #ffffff;
             --text: #1e293b;
             --text-light: #64748b;
             --border: #e2e8f0;
-            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1);
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: var(--bg);
             color: var(--text);
             line-height: 1.6;
-            min-height: 100vh;
-            -webkit-font-smoothing: antialiased;
-            touch-action: manipulation;
-            overscroll-behavior-y: none;
+            padding-bottom: 80px;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1rem;
-            padding-bottom: 5rem;
-        }
-
-        header {
+        .header {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
-            padding: 1.25rem 1rem;
-            box-shadow: var(--shadow-lg);
+            padding: 1.25rem;
             position: sticky;
             top: 0;
             z-index: 100;
         }
 
-        header h1 {
+        .header h1 {
             font-size: 1.5rem;
-            font-weight: 700;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
-        header p {
-            opacity: 0.9;
+        .header p {
             font-size: 0.85rem;
-            margin-top: 0.25rem;
+            opacity: 0.9;
             margin-left: 2rem;
         }
 
-        .offline-indicator {
+        .install-btn {
             position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            background: var(--warning);
+            bottom: 20px;
+            right: 20px;
+            background: var(--success);
             color: white;
-            text-align: center;
-            padding: 0.5rem;
-            font-size: 0.875rem;
-            font-weight: 600;
-            z-index: 1001;
+            border: none;
+            padding: 1rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);
+            z-index: 1000;
             display: none;
+            animation: pulse 2s infinite;
         }
 
-        .offline-indicator.show {
-            display: block;
+        .install-btn.show {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
-        .nav-tabs {
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .nav {
             display: flex;
             gap: 0.5rem;
-            margin: 1rem 0;
-            background: var(--card-bg);
-            padding: 0.5rem;
+            padding: 1rem;
+            background: var(--card);
+            margin: 1rem;
             border-radius: 12px;
-            box-shadow: var(--shadow);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
             position: sticky;
             top: 70px;
             z-index: 99;
         }
 
-        .nav-tab {
+        .nav button {
             flex: 1;
             padding: 0.75rem;
             border: none;
             background: transparent;
             color: var(--text-light);
             font-weight: 600;
-            cursor: pointer;
             border-radius: 8px;
-            transition: all 0.3s ease;
-            font-size: 0.9rem;
-            text-align: center;
+            font-size: 0.95rem;
         }
 
-        .nav-tab.active {
+        .nav button.active {
             background: var(--primary);
             color: white;
-            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
         }
 
         .page {
             display: none;
-            animation: fadeIn 0.3s ease;
+            padding: 0 1rem;
         }
 
         .page.active {
             display: block;
+            animation: fadeIn 0.3s;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         .card {
-            background: var(--card-bg);
+            background: var(--card);
             border-radius: 16px;
             padding: 1.25rem;
-            box-shadow: var(--shadow);
             margin-bottom: 1rem;
-        }
-
-        .form-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        @media (min-width: 640px) {
-            .form-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .form-group {
-            display: flex;
-            flex-direction: column;
+            margin-bottom: 1rem;
         }
 
         .form-group label {
+            display: block;
             font-weight: 600;
-            margin-bottom: 0.5rem;
             font-size: 0.85rem;
+            margin-bottom: 0.5rem;
             color: var(--text);
         }
 
         .form-group input {
-            padding: 0.875rem 1rem;
+            width: 100%;
+            padding: 0.875rem;
             border: 2px solid var(--border);
             border-radius: 10px;
             font-size: 16px;
-            background: var(--bg);
-            width: 100%;
         }
 
         .form-group input:focus {
             outline: none;
             border-color: var(--primary);
-            background: white;
         }
 
         .btn {
-            padding: 0.875rem 1.5rem;
+            width: 100%;
+            padding: 1rem;
             border: none;
             border-radius: 10px;
             font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
             font-size: 1rem;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            width: 100%;
-        }
-
-        .btn:active {
-            transform: scale(0.96);
-        }
-
-        @media (min-width: 640px) {
-            .btn {
-                width: auto;
-            }
+            cursor: pointer;
+            margin-top: 0.5rem;
         }
 
         .btn-primary {
@@ -232,74 +183,62 @@
         }
 
         .btn-secondary {
-            background: var(--secondary);
+            background: var(--text-light);
             color: white;
         }
 
-        .stats-grid {
+        .stats {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
             gap: 0.75rem;
             margin-bottom: 1rem;
         }
 
-        .stat-card {
-            background: var(--card-bg);
-            padding: 0.875rem;
+        .stat {
+            background: var(--card);
+            padding: 1rem;
             border-radius: 12px;
-            box-shadow: var(--shadow);
             border-left: 4px solid var(--primary);
         }
 
-        .stat-card h3 {
+        .stat h4 {
             font-size: 0.7rem;
             color: var(--text-light);
             text-transform: uppercase;
-            margin-bottom: 0.25rem;
         }
 
-        .stat-card .value {
+        .stat div {
             font-size: 1.5rem;
             font-weight: 700;
         }
 
-        .table-container {
-            overflow-x: auto;
-            background: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-        }
-
         table {
             width: 100%;
-            border-collapse: collapse;
-            min-width: 600px;
+            font-size: 0.9rem;
         }
 
         th {
-            padding: 0.75rem;
             text-align: left;
-            font-size: 0.7rem;
+            padding: 0.75rem;
             color: var(--text-light);
+            font-size: 0.7rem;
             text-transform: uppercase;
             border-bottom: 2px solid var(--border);
-            font-weight: 600;
         }
 
         td {
             padding: 0.75rem;
             border-bottom: 1px solid var(--border);
-            font-size: 0.9rem;
         }
 
-        .price-tag {
+        .tag {
             display: inline-block;
             padding: 0.25rem 0.5rem;
+            background: #d1fae5;
+            color: #065f46;
             border-radius: 12px;
             font-weight: 600;
             font-size: 0.8rem;
-            background: #d1fae5;
-            color: #065f46;
         }
 
         .actions {
@@ -307,14 +246,12 @@
             gap: 0.5rem;
         }
 
-        .btn-action {
+        .actions button {
             padding: 0.5rem 0.75rem;
             border: none;
             border-radius: 6px;
-            font-weight: 600;
-            cursor: pointer;
             font-size: 0.8rem;
-            flex: 1;
+            font-weight: 600;
         }
 
         .btn-sell {
@@ -322,71 +259,9 @@
             color: white;
         }
 
-        .btn-restock {
+        .btn-add {
             background: var(--warning);
             color: white;
-        }
-
-        .btn-icon {
-            padding: 0.5rem;
-            border: none;
-            background: transparent;
-            cursor: pointer;
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 3rem 1rem;
-            color: var(--text-light);
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 1rem;
-            left: 1rem;
-            right: 1rem;
-            background: #1e293b;
-            color: white;
-            padding: 1rem;
-            border-radius: 12px;
-            display: none;
-            align-items: center;
-            gap: 0.75rem;
-            z-index: 3000;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .toast.show {
-            display: flex;
-        }
-
-        .install-banner {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--primary);
-            color: white;
-            padding: 1rem;
-            z-index: 2500;
-            display: none;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-
-        .install-banner.show {
-            display: flex;
-        }
-
-        .install-banner button {
-            background: white;
-            color: var(--primary);
-            border: none;
-            padding: 0.875rem;
-            border-radius: 8px;
-            font-weight: 700;
-            cursor: pointer;
-            font-size: 1rem;
         }
 
         .modal {
@@ -400,8 +275,6 @@
             z-index: 2000;
             justify-content: center;
             align-items: flex-end;
-            padding: 1rem;
-            padding-bottom: env(safe-area-inset-bottom, 1rem);
         }
 
         .modal.active {
@@ -412,9 +285,9 @@
             background: white;
             width: 100%;
             max-width: 400px;
-            border-radius: 20px;
+            border-radius: 20px 20px 0 0;
             padding: 1.5rem;
-            animation: slideUp 0.3s ease;
+            animation: slideUp 0.3s;
         }
 
         @keyframes slideUp {
@@ -422,10 +295,33 @@
             to { transform: translateY(0); }
         }
 
+        .toast {
+            position: fixed;
+            bottom: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #1e293b;
+            color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            display: none;
+            z-index: 3000;
+        }
+
+        .toast.show {
+            display: block;
+        }
+
+        .empty {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-light);
+        }
+
         .sell-options {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 0.75rem;
+            gap: 1rem;
             margin: 1rem 0;
         }
 
@@ -442,7 +338,7 @@
             background: #eff6ff;
         }
 
-        .manual-install {
+        .instructions {
             position: fixed;
             top: 50%;
             left: 50%;
@@ -450,28 +346,30 @@
             background: white;
             padding: 1.5rem;
             border-radius: 16px;
-            box-shadow: var(--shadow-lg);
+            box-shadow: 0 20px 25px rgba(0,0,0,0.2);
             z-index: 3000;
             display: none;
             width: 90%;
             max-width: 320px;
-            text-align: center;
         }
 
-        .manual-install.show {
+        .instructions.show {
             display: block;
         }
 
-        .manual-install h3 {
+        .instructions h3 {
             margin-bottom: 1rem;
-            color: var(--text);
         }
 
-        .manual-install p {
+        .instructions ol {
+            margin-left: 1.25rem;
+            line-height: 2;
             color: var(--text-light);
-            font-size: 0.9rem;
-            line-height: 1.6;
-            margin-bottom: 1rem;
+        }
+
+        .instructions button {
+            margin-top: 1rem;
+            width: 100%;
         }
 
         .overlay {
@@ -491,511 +389,397 @@
     </style>
 </head>
 <body>
-    <div class="offline-indicator" id="offline-indicator">📴 Offline Mode</div>
-    
-    <div class="overlay" id="overlay" onclick="closeManualInstall()"></div>
-    <div class="manual-install" id="manual-install">
+
+    <div class="header">
+        <h1>💰 PriceTrack Pro</h1>
+        <p>Offline Inventory</p>
+    </div>
+
+    <!-- Install Button -->
+    <button class="install-btn" id="installBtn" onclick="tryInstall()">
+        📲 Install App
+    </button>
+
+    <div class="overlay" id="overlay" onclick="hideInstructions()"></div>
+    <div class="instructions" id="instructions">
         <h3>📱 Add to Home Screen</h3>
-        <p id="install-instructions">Tap the menu (⋮) and select "Add to Home screen"</p>
-        <button class="btn btn-primary" onclick="closeManualInstall()" style="margin-top: 0.5rem;">Got it</button>
+        <ol id="steps">
+            <li>Tap the <strong>menu button</strong> (⋮) in Chrome</li>
+            <li>Select <strong>"Add to Home screen"</strong></li>
+            <li>Tap <strong>"Add"</strong></li>
+        </ol>
+        <button class="btn btn-primary" onclick="hideInstructions()">Got it</button>
     </div>
 
-    <header>
-        <div class="container" style="padding: 0 1rem;">
-            <h1>💰 PriceTrack Pro</h1>
-            <p>Offline Inventory Management</p>
-        </div>
-    </header>
+    <div class="nav">
+        <button class="active" onclick="show('add')">➕ Add</button>
+        <button onclick="show('view')">📦 View</button>
+    </div>
 
-    <div class="container">
-        <div class="nav-tabs">
-            <button class="nav-tab active" onclick="showPage('form')">➕ Add</button>
-            <button class="nav-tab" onclick="showPage('display')">📦 Stock</button>
-        </div>
-
-        <!-- Form Page -->
-        <div id="form-page" class="page active">
-            <div class="card">
-                <h2 style="margin-bottom: 1rem; font-size: 1.1rem;">New Product</h2>
-                <form id="product-form">
-                    <div class="form-grid">
-                        <div class="form-group">
-                            <label>Product Name</label>
-                            <input type="text" id="product-name" required placeholder="e.g. Rice">
-                        </div>
-                        <div class="form-group">
-                            <label>Units per Bale</label>
-                            <input type="number" id="units-per-bale" required value="20" min="1">
-                        </div>
-                        <div class="form-group">
-                            <label>Bales in Stock</label>
-                            <input type="number" id="bale-quantity" required value="0" min="0" oninput="calcTotal()">
-                        </div>
-                        <div class="form-group">
-                            <label>Loose Units</label>
-                            <input type="number" id="unit-quantity" required value="0" min="0" oninput="calcTotal()">
-                        </div>
-                        <div class="form-group">
-                            <label>Cost per Unit ($)</label>
-                            <input type="number" id="original-price" required value="0" min="0" step="0.01">
-                        </div>
-                        <div class="form-group">
-                            <label>Sell per Unit ($)</label>
-                            <input type="number" id="selling-price" required value="0" min="0" step="0.01">
-                        </div>
-                        <div class="form-group">
-                            <label>Sell per Bale ($)</label>
-                            <input type="number" id="bale-selling-price" required value="0" min="0" step="0.01">
-                        </div>
-                        <div class="form-group">
-                            <label>Wholesale ($)</label>
-                            <input type="number" id="wholesale-price" required value="0" min="0" step="0.01">
-                        </div>
+    <!-- Add Page -->
+    <div id="add" class="page active">
+        <div class="card">
+            <h2 style="margin-bottom: 1rem;">New Product</h2>
+            <form id="form" onsubmit="saveProduct(event)">
+                <div class="form-group">
+                    <label>Product Name</label>
+                    <input type="text" id="name" required placeholder="e.g. Rice">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Units/Bale</label>
+                        <input type="number" id="upb" required value="20" min="1">
                     </div>
-                    
-                    <div style="background: #eff6ff; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
-                        <strong>Total:</strong> <span id="total-display" style="font-size: 1.2rem; color: var(--primary);">0 units</span>
-                    </div>
-
-                    <div style="display: flex; gap: 0.5rem;">
-                        <button type="submit" class="btn btn-primary" style="flex: 2;">💾 Save Product</button>
-                        <button type="button" class="btn btn-secondary" onclick="clearForm()" style="flex: 1;">Clear</button>
-                    </div>
-                </form>
-            </div>
-
-            <div class="card" style="background: #f0fdf4;">
-                <p style="font-size: 0.85rem; color: var(--text-light);">
-                    💡 <strong>Tip:</strong> This app works fully offline. Data is saved on your device.
-                </p>
-            </div>
-        </div>
-
-        <!-- Display Page -->
-        <div id="display-page" class="page">
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <h3>Products</h3>
-                    <div class="value" id="stat-products">0</div>
-                </div>
-                <div class="stat-card" style="border-color: var(--success);">
-                    <h3>Bales</h3>
-                    <div class="value" id="stat-bales">0</div>
-                </div>
-                <div class="stat-card" style="border-color: var(--warning);">
-                    <h3>Units</h3>
-                    <div class="value" id="stat-units">0</div>
-                </div>
-                <div class="stat-card" style="border-color: var(--primary);">
-                    <h3>Value</h3>
-                    <div class="value" id="stat-value">$0</div>
-                </div>
-            </div>
-
-            <div class="card">
-                <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-                    <input type="text" id="search" placeholder="🔍 Search..." onkeyup="doSearch()" style="flex: 1; padding: 0.75rem; border: 2px solid var(--border); border-radius: 10px; font-size: 16px;">
-                    <button onclick="exportData()" class="btn btn-secondary" style="width: auto; padding: 0.75rem;">📤</button>
-                    <button onclick="document.getElementById('file-input').click()" class="btn btn-secondary" style="width: auto; padding: 0.75rem;">📥</button>
-                    <input type="file" id="file-input" accept=".json" style="display: none;" onchange="importData(this)">
-                </div>
-
-                <div class="table-container">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Item</th>
-                                <th>Stock</th>
-                                <th>Prices</th>
-                                <th>Sell/Add</th>
-                                <th>Edit</th>
-                            </tr>
-                        </thead>
-                        <tbody id="tbody"></tbody>
-                    </table>
-                    <div id="empty" class="empty-state" style="display: none;">
-                        <p>No products yet</p>
+                    <div class="form-group">
+                        <label>Bales</label>
+                        <input type="number" id="bales" required value="0" min="0" oninput="calc()">
                     </div>
                 </div>
-            </div>
+                <div class="form-group">
+                    <label>Loose Units</label>
+                    <input type="number" id="units" required value="0" min="0" oninput="calc()">
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Cost/Unit ($)</label>
+                        <input type="number" id="cost" required value="0" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Sell/Unit ($)</label>
+                        <input type="number" id="price" required value="0" step="0.01">
+                    </div>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Sell/Bale ($)</label>
+                        <input type="number" id="balePrice" required value="0" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Wholesale ($)</label>
+                        <input type="number" id="ws" required value="0" step="0.01">
+                    </div>
+                </div>
+                <div style="background: #eff6ff; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
+                    <strong>Total: </strong><span id="total" style="font-size: 1.2rem; color: var(--primary);">0 units</span>
+                </div>
+                <button type="submit" class="btn btn-primary">💾 Save Product</button>
+            </form>
         </div>
     </div>
 
-    <!-- Install Banner -->
-    <div class="install-banner" id="install-banner">
-        <div style="display: flex; align-items: center; gap: 0.75rem;">
-            <span style="font-size: 2rem;">💰</span>
-            <div>
-                <strong>Install PriceTrack Pro</strong>
-                <p style="font-size: 0.85rem; opacity: 0.9; margin: 0;">Add to home screen for quick access</p>
+    <!-- View Page -->
+    <div id="view" class="page">
+        <div class="stats">
+            <div class="stat">
+                <h4>Products</h4>
+                <div id="st-products">0</div>
+            </div>
+            <div class="stat" style="border-color: var(--success);">
+                <h4>Bales</h4>
+                <div id="st-bales">0</div>
+            </div>
+            <div class="stat" style="border-color: var(--warning);">
+                <h4>Units</h4>
+                <div id="st-units">0</div>
+            </div>
+            <div class="stat" style="border-color: var(--primary);">
+                <h4>Value</h4>
+                <div id="st-value">$0</div>
             </div>
         </div>
-        <div style="display: flex; gap: 0.5rem;">
-            <button onclick="installApp()" style="flex: 1;">Install Now</button>
-            <button onclick="dismissInstall()" style="flex: 1; background: rgba(255,255,255,0.2); color: white;">Later</button>
-        </div>
-    </div>
 
-    <!-- Transaction Modal -->
-    <div class="modal" id="modal">
-        <div class="modal-content">
-            <h3 id="modal-title" style="margin-bottom: 0.5rem;">Sell</h3>
-            <p id="modal-product" style="font-weight: 600; margin-bottom: 0.25rem;"></p>
-            <p id="modal-stock" style="color: var(--text-light); font-size: 0.85rem; margin-bottom: 1rem;"></p>
+        <div class="card">
+            <input type="text" id="search" placeholder="🔍 Search..." onkeyup="search()" style="width: 100%; padding: 0.75rem; border: 2px solid var(--border); border-radius: 10px; margin-bottom: 1rem; font-size: 16px;">
             
-            <div class="sell-options" id="sell-options">
-                <div class="sell-option selected" onclick="setSellType('unit')" id="opt-unit">
-                    <div style="font-size: 1.5rem;">📦</div>
-                    <div style="font-weight: 600; font-size: 0.9rem;">By Unit</div>
-                </div>
-                <div class="sell-option" onclick="setSellType('bale')" id="opt-bale">
-                    <div style="font-size: 1.5rem;">🎁</div>
-                    <div style="font-weight: 600; font-size: 0.9rem;">By Bale</div>
-                </div>
+            <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                <button class="btn btn-secondary" onclick="exportData()" style="flex: 1; margin: 0;">📤 Export</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('imp').click()" style="flex: 1; margin: 0;">📥 Import</button>
+                <input type="file" id="imp" accept=".json" style="display: none;" onchange="importData(this)">
             </div>
 
-            <div class="form-group" style="margin: 1rem 0;">
-                <label>Quantity</label>
-                <input type="number" id="tx-qty" value="1" min="1" style="text-align: center; font-size: 1.25rem; font-weight: 700;">
-                <p id="tx-hint" style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.5rem;"></p>
-            </div>
-
-            <div id="tx-total" style="background: #eff6ff; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; display: none; text-align: center;">
-                <span style="color: var(--text-light); font-size: 0.85rem;">Total: </span>
-                <span id="tx-amount" style="font-size: 1.25rem; font-weight: 700; color: var(--primary);"></span>
-            </div>
-
-            <p id="tx-error" style="color: var(--danger); font-size: 0.85rem; display: none; margin-bottom: 1rem;"></p>
-
-            <div style="display: flex; gap: 0.5rem;">
-                <button onclick="closeModal()" class="btn btn-secondary">Cancel</button>
-                <button onclick="confirmTx()" class="btn btn-primary" id="confirm-btn">Confirm</button>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Stock</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody"></tbody>
+            </table>
+            <div id="empty" class="empty" style="display: none;">
+                No products yet
             </div>
         </div>
     </div>
 
-    <div class="toast" id="toast">
-        <span>✓</span>
-        <span id="toast-msg">Done</span>
+    <!-- Modal -->
+    <div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
+        <div class="modal-content">
+            <h3 id="mtitle">Sell</h3>
+            <p id="mproduct" style="font-weight: 600;"></p>
+            <p id="mstock" style="color: var(--text-light); font-size: 0.85rem;"></p>
+            
+            <div class="sell-options" id="sopts">
+                <div class="sell-option selected" onclick="setType('unit')">
+                    <div style="font-size: 1.5rem;">📦</div>
+                    <div>Unit</div>
+                </div>
+                <div class="sell-option" onclick="setType('bale')">
+                    <div style="font-size: 1.5rem;">🎁</div>
+                    <div>Bale</div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Quantity</label>
+                <input type="number" id="mqty" value="1" min="1" style="text-align: center; font-size: 1.25rem;">
+            </div>
+
+            <p id="merror" style="color: var(--danger); display: none;"></p>
+
+            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+                <button class="btn btn-secondary" onclick="closeModal()" style="flex: 1; margin: 0;">Cancel</button>
+                <button class="btn btn-primary" onclick="doTx()" style="flex: 1; margin: 0;">Confirm</button>
+            </div>
+        </div>
     </div>
+
+    <div class="toast" id="toast">✓ Done</div>
 
     <script>
-        // ==================== SERVICE WORKER ====================
-        const swCode = `
-            const CACHE = 'pricetrack-v2';
-            const ASSETS = [
-                self.location.href
-            ];
-            
-            self.addEventListener('install', e => {
-                e.waitUntil(
-                    caches.open(CACHE).then(cache => cache.addAll(ASSETS))
-                );
-                self.skipWaiting();
-            });
-            
-            self.addEventListener('activate', e => {
-                e.waitUntil(self.clients.claim());
-            });
-            
-            self.addEventListener('fetch', e => {
-                e.respondWith(
-                    caches.match(e.request).then(r => r || fetch(e.request))
-                );
-            });
-        `;
-
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register(
-                URL.createObjectURL(new Blob([swCode], {type: 'application/javascript'}))
-            ).catch(() => console.log('SW skip'));
-        }
-
         // ==================== DATA ====================
         let products = [];
-        let currentTx = null;
-        let installPrompt = null;
+        let current = null;
+        let deferredPrompt = null;
 
         function load() {
             try {
-                const data = localStorage.getItem('ptp_products');
-                if (data) products = JSON.parse(data);
+                const d = localStorage.getItem('ptp_data');
+                if (d) products = JSON.parse(d);
             } catch(e) { products = []; }
         }
 
         function save() {
-            localStorage.setItem('ptp_products', JSON.stringify(products));
+            localStorage.setItem('ptp_data', JSON.stringify(products));
             updateStats();
             render();
         }
 
-        // ==================== INSTALL PROMPT ====================
+        // ==================== INSTALL ====================
         
-        // Capture the install prompt
+        // Capture install prompt
         window.addEventListener('beforeinstallprompt', (e) => {
+            console.log('beforeinstallprompt fired');
             e.preventDefault();
-            installPrompt = e;
-            console.log('Install prompt captured');
-            
-            // Show banner after 3 seconds if not in standalone
-            setTimeout(() => {
-                if (!isStandalone()) {
-                    document.getElementById('install-banner').classList.add('show');
-                }
-            }, 3000);
+            deferredPrompt = e;
+            showInstallButton();
+        });
+
+        // Also try to show button after user interaction
+        let interactionCount = 0;
+        document.addEventListener('click', () => {
+            interactionCount++;
+            // Show after 3 clicks if we have data and not standalone
+            if (interactionCount === 3 && products.length > 0 && !isStandalone()) {
+                showInstallButton();
+            }
         });
 
         function isStandalone() {
             return window.matchMedia('(display-mode: standalone)').matches || 
-                   window.navigator.standalone === true ||
-                   document.referrer.includes('android-app://');
+                   window.navigator.standalone ||
+                   location.href.includes('localhost');
         }
 
-        function installApp() {
-            if (installPrompt) {
-                installPrompt.prompt();
-                installPrompt.userChoice.then((result) => {
-                    if (result.outcome === 'accepted') {
+        function showInstallButton() {
+            if (isStandalone()) return;
+            document.getElementById('installBtn').classList.add('show');
+        }
+
+        function tryInstall() {
+            if (deferredPrompt) {
+                deferredPrompt.prompt();
+                deferredPrompt.userChoice.then((choice) => {
+                    if (choice.outcome === 'accepted') {
                         showToast('App installed!');
+                        document.getElementById('installBtn').style.display = 'none';
                     }
-                    installPrompt = null;
-                    document.getElementById('install-banner').classList.remove('show');
+                    deferredPrompt = null;
                 });
             } else {
-                // Show manual instructions
-                showManualInstall();
+                showInstructions();
             }
         }
 
-        function dismissInstall() {
-            document.getElementById('install-banner').classList.remove('show');
-            localStorage.setItem('ptp_dismissed', Date.now());
-        }
-
-        function showManualInstall() {
+        function showInstructions() {
             const ua = navigator.userAgent.toLowerCase();
-            let msg = 'Tap menu (⋮) and select "Add to Home screen"';
+            let steps = `
+                <li>Tap the <strong>menu (⋮)</strong> in Chrome</li>
+                <li>Select <strong>"Add to Home screen"</strong></li>
+                <li>Tap <strong>"Add"</strong></li>
+            `;
             
             if (ua.includes('samsung')) {
-                msg = 'Tap menu ⋮ → "Add page to" → "Home screen"';
+                steps = `
+                    <li>Tap <strong>menu ⋮</strong></li>
+                    <li>Select <strong>"Add page to"</strong></li>
+                    <li>Choose <strong>"Home screen"</strong></li>
+                `;
             } else if (ua.includes('firefox')) {
-                msg = 'Tap ⋮ → "Add to Home screen"';
-            } else if (ua.includes('opera')) {
-                msg = 'Tap + button in address bar';
+                steps = `
+                    <li>Tap <strong>menu ⋮</strong></li>
+                    <li>Select <strong>"Add to Home screen"</strong></li>
+                `;
             } else if (/iphone|ipad|ipod/.test(ua)) {
-                msg = 'Tap Share button ⬆️ then "Add to Home Screen"';
+                steps = `
+                    <li>Tap <strong>Share button ⬆️</strong></li>
+                    <li>Scroll down and tap <strong>"Add to Home Screen"</strong></li>
+                    <li>Tap <strong>"Add"</strong></li>
+                `;
             }
             
-            document.getElementById('install-instructions').textContent = msg;
-            document.getElementById('manual-install').classList.add('show');
+            document.getElementById('steps').innerHTML = steps;
+            document.getElementById('instructions').classList.add('show');
             document.getElementById('overlay').classList.add('show');
         }
 
-        function closeManualInstall() {
-            document.getElementById('manual-install').classList.remove('show');
+        function hideInstructions() {
+            document.getElementById('instructions').classList.remove('show');
             document.getElementById('overlay').classList.remove('show');
         }
 
-        // Check if we should show install (not dismissed in last 7 days)
-        function checkInstallBanner() {
-            const dismissed = localStorage.getItem('ptp_dismissed');
-            if (dismissed && Date.now() - parseInt(dismissed) < 7 * 24 * 60 * 60 * 1000) return;
-            
-            if (!isStandalone() && !installPrompt) {
-                // Show manual install hint after 5 seconds
-                setTimeout(() => {
-                    if (products.length > 0) { // Only show if they have data
-                        showManualInstall();
-                    }
-                }, 5000);
+        // Always check and show button after 10 seconds if conditions met
+        setTimeout(() => {
+            if (!isStandalone() && products.length > 0) {
+                showInstallButton();
             }
+        }, 10000);
+
+        // ==================== APP ====================
+        function calc() {
+            const upb = parseInt(document.getElementById('upb').value) || 1;
+            const b = parseInt(document.getElementById('bales').value) || 0;
+            const u = parseInt(document.getElementById('units').value) || 0;
+            document.getElementById('total').textContent = `${(b*upb)+u} units (${b}b+${u}u)`;
         }
 
-        // ==================== UI ====================
-        function calcTotal() {
-            const upb = parseInt(document.getElementById('units-per-bale').value) || 1;
-            const bales = parseInt(document.getElementById('bale-quantity').value) || 0;
-            const units = parseInt(document.getElementById('unit-quantity').value) || 0;
-            const total = (bales * upb) + units;
-            document.getElementById('total-display').textContent = `${total} units (${bales}b+${units}u)`;
-        }
-
-        document.getElementById('product-form').onsubmit = (e) => {
+        function saveProduct(e) {
             e.preventDefault();
-            
             const p = {
                 id: Date.now(),
-                name: document.getElementById('product-name').value,
-                unitsPerBale: parseInt(document.getElementById('units-per-bale').value) || 1,
-                baleQty: parseInt(document.getElementById('bale-quantity').value) || 0,
-                unitQty: parseInt(document.getElementById('unit-quantity').value) || 0,
-                cost: parseFloat(document.getElementById('original-price').value) || 0,
-                unitPrice: parseFloat(document.getElementById('selling-price').value) || 0,
-                balePrice: parseFloat(document.getElementById('bale-selling-price').value) || 0,
-                wholesale: parseFloat(document.getElementById('wholesale-price').value) || 0,
-                txs: []
+                name: document.getElementById('name').value,
+                upb: parseInt(document.getElementById('upb').value) || 1,
+                bales: parseInt(document.getElementById('bales').value) || 0,
+                units: parseInt(document.getElementById('units').value) || 0,
+                cost: parseFloat(document.getElementById('cost').value) || 0,
+                price: parseFloat(document.getElementById('price').value) || 0,
+                balePrice: parseFloat(document.getElementById('balePrice').value) || 0,
+                ws: parseFloat(document.getElementById('ws').value) || 0
             };
-            
             products.push(p);
             save();
             showToast(`Saved: ${p.name}`);
-            clearForm();
-        };
-
-        function clearForm() {
-            document.getElementById('product-form').reset();
-            document.getElementById('units-per-bale').value = 20;
-            calcTotal();
+            document.getElementById('form').reset();
+            document.getElementById('upb').value = 20;
+            calc();
         }
 
-        function showPage(page) {
+        function show(page) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav-tab').forEach((t, i) => {
-                t.classList.toggle('active', (page === 'form' && i === 0) || (page === 'display' && i === 1));
+            document.querySelectorAll('.nav button').forEach((b, i) => {
+                b.classList.toggle('active', (page==='add'&&i===0)||(page==='view'&&i===1));
             });
-            
-            if (page === 'form') {
-                document.getElementById('form-page').classList.add('active');
-            } else {
-                document.getElementById('display-page').classList.add('active');
+            document.getElementById(page).classList.add('active');
+            if (page === 'view') {
                 updateStats();
                 render();
             }
         }
 
         function formatStock(p) {
-            if (p.baleQty > 0 && p.unitQty > 0) return `${p.baleQty}b ${p.unitQty}u`;
-            if (p.baleQty > 0) return `${p.baleQty} bales`;
-            if (p.unitQty > 0) return `${p.unitQty} units`;
-            return '❌ Out';
+            if (p.bales > 0 && p.units > 0) return `${p.bales}b ${p.units}u`;
+            if (p.bales > 0) return `${p.bales} bales`;
+            if (p.units > 0) return `${p.units} units`;
+            return 'Out';
         }
 
-        function totalUnits(p) {
-            return (p.baleQty * p.unitsPerBale) + p.unitQty;
+        function total(p) {
+            return (p.bales * p.upb) + p.units;
         }
 
-        function render(filtered) {
-            const data = filtered || products;
-            const tbody = document.getElementById('tbody');
+        function render(list) {
+            const data = list || products;
+            const tb = document.getElementById('tbody');
             
             if (!data.length) {
-                tbody.innerHTML = '';
+                tb.innerHTML = '';
                 document.getElementById('empty').style.display = 'block';
                 return;
             }
-            
             document.getElementById('empty').style.display = 'none';
-            tbody.innerHTML = data.map(p => {
-                const total = totalUnits(p);
-                const lastTx = p.txs?.length ? p.txs[p.txs.length - 1] : null;
-                
-                return `
-                    <tr>
-                        <td>
-                            <div style="font-weight: 600;">${escape(p.name)}</div>
-                            <div style="font-size: 0.75rem; color: var(--text-light);">${p.unitsPerBale}u/bale</div>
-                            ${lastTx ? `<div style="font-size: 0.7rem; color: var(--text-light);">${lastTx.type} ${lastTx.qty}${lastTx.sellType||''}</div>` : ''}
-                        </td>
-                        <td>
-                            <div style="font-weight: 700; ${total===0?'color:var(--danger);':''}">${formatStock(p)}</div>
-                            <div style="font-size: 0.75rem; color: var(--text-light);">${total} total</div>
-                        </td>
-                        <td>
-                            <div class="price-tag">$${p.unitPrice.toFixed(2)}</div>
-                            <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 0.25rem;">Bale: $${p.balePrice.toFixed(2)}</div>
-                        </td>
-                        <td>
-                            <div class="actions">
-                                <button class="btn-action btn-sell" onclick="openSell(${p.id})" ${total===0?'disabled style="opacity:0.4;"':''}>Sell</button>
-                                <button class="btn-action btn-restock" onclick="openRestock(${p.id})">+Bales</button>
-                            </div>
-                        </td>
-                        <td>
-                            <button class="btn-icon" onclick="editProduct(${p.id})" style="color: var(--primary);">✏️</button>
-                            <button class="btn-icon" onclick="deleteProduct(${p.id})" style="color: var(--danger);">🗑️</button>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
+            
+            tb.innerHTML = data.map(p => `
+                <tr>
+                    <td>
+                        <div style="font-weight: 600;">${esc(p.name)}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-light);">$${p.price.toFixed(2)}/unit</div>
+                    </td>
+                    <td>
+                        <div style="font-weight: 700;">${formatStock(p)}</div>
+                        <div style="font-size: 0.75rem; color: var(--text-light);">${total(p)} total</div>
+                    </td>
+                    <td>
+                        <div class="actions">
+                            <button class="btn-sell" onclick="sell(${p.id})" ${total(p)===0?'disabled style="opacity:0.4"':''}>Sell</button>
+                            <button class="btn-add" onclick="restock(${p.id})">+</button>
+                            <button onclick="del(${p.id})" style="background: var(--danger); color: white;">🗑</button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
         }
 
-        function openSell(id) {
+        function sell(id) {
             const p = products.find(x => x.id === id);
-            currentTx = { id, type: 'sell', sellType: 'unit' };
-            
-            document.getElementById('modal-title').textContent = 'Sell Product';
-            document.getElementById('modal-product').textContent = p.name;
-            document.getElementById('modal-stock').textContent = `Stock: ${formatStock(p)}`;
-            document.getElementById('sell-options').style.display = 'grid';
-            document.getElementById('tx-qty').value = 1;
-            document.getElementById('tx-error').style.display = 'none';
-            
-            setSellType('unit');
+            current = { id, type: 'sell', sellType: 'unit' };
+            document.getElementById('mtitle').textContent = 'Sell';
+            document.getElementById('mproduct').textContent = p.name;
+            document.getElementById('mstock').textContent = `Stock: ${formatStock(p)}`;
+            document.getElementById('sopts').style.display = 'grid';
+            document.getElementById('mqty').value = 1;
+            document.getElementById('merror').style.display = 'none';
+            setType('unit');
             document.getElementById('modal').classList.add('active');
-            updateTxTotal();
         }
 
-        function openRestock(id) {
+        function restock(id) {
             const p = products.find(x => x.id === id);
-            currentTx = { id, type: 'restock' };
-            
-            document.getElementById('modal-title').textContent = 'Restock (Bales)';
-            document.getElementById('modal-product').textContent = p.name;
-            document.getElementById('modal-stock').textContent = `Current: ${formatStock(p)}`;
-            document.getElementById('sell-options').style.display = 'none';
-            document.getElementById('tx-qty').value = 1;
-            document.getElementById('tx-hint').textContent = 'Enter bales to add';
-            document.getElementById('tx-error').style.display = 'none';
-            
+            current = { id, type: 'restock' };
+            document.getElementById('mtitle').textContent = 'Restock (Bales)';
+            document.getElementById('mproduct').textContent = p.name;
+            document.getElementById('mstock').textContent = `Current: ${formatStock(p)}`;
+            document.getElementById('sopts').style.display = 'none';
+            document.getElementById('mqty').value = 1;
+            document.getElementById('merror').style.display = 'none';
             document.getElementById('modal').classList.add('active');
-            updateTxTotal();
         }
 
-        function setSellType(type) {
-            currentTx.sellType = type;
+        function setType(t) {
+            current.sellType = t;
             document.querySelectorAll('.sell-option').forEach(el => el.classList.remove('selected'));
-            document.getElementById(`opt-${type}`).classList.add('selected');
-            
-            const p = products.find(x => x.id === currentTx.id);
-            if (type === 'unit') {
-                document.getElementById('tx-hint').textContent = `Available: ${totalUnits(p)} units`;
-            } else {
-                document.getElementById('tx-hint').textContent = `Available: ${p.baleQty} bales`;
-            }
-            updateTxTotal();
-        }
-
-        document.getElementById('tx-qty').oninput = updateTxTotal;
-
-        function updateTxTotal() {
-            const qty = parseInt(document.getElementById('tx-qty').value) || 0;
-            const p = products.find(x => x.id === currentTx.id);
-            
-            if (qty > 0) {
-                let total = 0;
-                if (currentTx.type === 'sell') {
-                    total = currentTx.sellType === 'unit' 
-                        ? qty * p.unitPrice 
-                        : qty * p.balePrice;
-                } else {
-                    total = qty * p.unitsPerBale * p.cost;
-                }
-                document.getElementById('tx-total').style.display = 'block';
-                document.getElementById('tx-amount').textContent = '$' + total.toFixed(2);
-            } else {
-                document.getElementById('tx-total').style.display = 'none';
-            }
+            event.currentTarget.classList.add('selected');
         }
 
         function closeModal() {
             document.getElementById('modal').classList.remove('active');
-            currentTx = null;
+            current = null;
         }
 
-        function confirmTx() {
-            const qty = parseInt(document.getElementById('tx-qty').value);
-            const err = document.getElementById('tx-error');
-            const p = products.find(x => x.id === currentTx.id);
+        function doTx() {
+            const qty = parseInt(document.getElementById('mqty').value);
+            const err = document.getElementById('merror');
+            const p = products.find(x => x.id === current.id);
             
             if (!qty || qty < 1) {
                 err.textContent = 'Enter quantity';
@@ -1003,75 +787,66 @@
                 return;
             }
             
-            if (currentTx.type === 'sell') {
-                if (currentTx.sellType === 'unit') {
-                    const avail = totalUnits(p);
+            if (current.type === 'sell') {
+                if (current.sellType === 'unit') {
+                    const avail = total(p);
                     if (qty > avail) {
                         err.textContent = `Only ${avail} available`;
                         err.style.display = 'block';
                         return;
                     }
-                    
                     let rem = qty;
-                    if (p.unitQty >= rem) {
-                        p.unitQty -= rem;
+                    if (p.units >= rem) {
+                        p.units -= rem;
                     } else {
-                        rem -= p.unitQty;
-                        p.unitQty = 0;
-                        while (rem > 0 && p.baleQty > 0) {
-                            p.baleQty--;
-                            p.unitQty = p.unitsPerBale;
-                            if (p.unitQty >= rem) {
-                                p.unitQty -= rem;
+                        rem -= p.units;
+                        p.units = 0;
+                        while (rem > 0 && p.bales > 0) {
+                            p.bales--;
+                            p.units = p.upb;
+                            if (p.units >= rem) {
+                                p.units -= rem;
                                 rem = 0;
                             } else {
-                                rem -= p.unitQty;
-                                p.unitQty = 0;
+                                rem -= p.units;
+                                p.units = 0;
                             }
                         }
                     }
                     showToast(`Sold ${qty} units`);
                 } else {
-                    if (qty > p.baleQty) {
-                        err.textContent = `Only ${p.baleQty} bales`;
+                    if (qty > p.bales) {
+                        err.textContent = `Only ${p.bales} bales`;
                         err.style.display = 'block';
                         return;
                     }
-                    p.baleQty -= qty;
+                    p.bales -= qty;
                     showToast(`Sold ${qty} bales`);
                 }
             } else {
-                p.baleQty += qty;
+                p.bales += qty;
                 showToast(`Added ${qty} bales`);
             }
-            
-            if (!p.txs) p.txs = [];
-            p.txs.push({
-                type: currentTx.type,
-                sellType: currentTx.sellType,
-                qty: qty,
-                date: new Date().toLocaleDateString()
-            });
             
             save();
             closeModal();
         }
 
         function updateStats() {
-            document.getElementById('stat-products').textContent = products.length;
-            document.getElementById('stat-bales').textContent = products.reduce((a,p) => a + p.baleQty, 0);
-            document.getElementById('stat-units').textContent = products.reduce((a,p) => a + p.unitQty, 0);
-            const val = products.reduce((a,p) => a + (p.cost * totalUnits(p)), 0);
-            document.getElementById('stat-value').textContent = '$' + val.toLocaleString();
+            document.getElementById('st-products').textContent = products.length;
+            document.getElementById('st-bales').textContent = products.reduce((a,p)=>a+p.bales,0);
+            document.getElementById('st-units').textContent = products.reduce((a,p)=>a+p.units,0);
+            const val = products.reduce((a,p)=>a+(p.cost*total(p)),0);
+            document.getElementById('st-value').textContent = '$'+val.toLocaleString();
         }
 
-        function doSearch() {
+        function search() {
             const term = document.getElementById('search').value.toLowerCase();
             const filtered = term ? products.filter(p => p.name.toLowerCase().includes(term)) : products;
             render(filtered);
         }
 
-        function deleteProduct(id) {
+        function del(id) {
             if (confirm('Delete?')) {
                 products = products.filter(p => p.id !== id);
                 save();
@@ -1079,84 +854,55 @@
             }
         }
 
-        function editProduct(id) {
-            const p = products.find(x => x.id === id);
-            document.getElementById('product-name').value = p.name;
-            document.getElementById('units-per-bale').value = p.unitsPerBale;
-            document.getElementById('bale-quantity').value = p.baleQty;
-            document.getElementById('unit-quantity').value = p.unitQty;
-            document.getElementById('original-price').value = p.cost;
-            document.getElementById('selling-price').value = p.unitPrice;
-            document.getElementById('bale-selling-price').value = p.balePrice;
-            document.getElementById('wholesale-price').value = p.wholesale;
-            
-            calcTotal();
-            products = products.filter(x => x.id !== id);
-            save();
-            showPage('form');
-        }
-
         function exportData() {
             const data = JSON.stringify(products);
-            const blob = new Blob([data], {type: 'application/json'});
+            const blob = new Blob([data], {type:'application/json'});
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `backup-${new Date().toISOString().split('T')[0]}.json`;
+            a.download = `ptp-${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             showToast('Exported');
         }
 
-        function importData(input) {
-            const file = input.files[0];
-            if (!file) return;
-            
-            const reader = new FileReader();
-            reader.onload = e => {
+        function importData(inp) {
+            const f = inp.files[0];
+            if (!f) return;
+            const r = new FileReader();
+            r.onload = e => {
                 try {
-                    const data = JSON.parse(e.target.result);
-                    if (Array.isArray(data)) {
-                        products = data;
+                    const d = JSON.parse(e.target.result);
+                    if (Array.isArray(d)) {
+                        products = d;
                         save();
-                        showToast(`Imported ${data.length} items`);
+                        showToast(`Imported ${d.length}`);
                     }
-                } catch(err) {
-                    alert('Invalid file');
-                }
-                input.value = '';
+                } catch(err) { alert('Invalid'); }
+                inp.value = '';
             };
-            reader.readAsText(file);
+            r.readAsText(f);
         }
 
-        function escape(text) {
-            const div = document.createElement('div');
-            div.textContent = text;
-            return div.innerHTML;
+        function esc(t) {
+            const d = document.createElement('div');
+            d.textContent = t;
+            return d.innerHTML;
         }
 
-        function showToast(msg) {
-            document.getElementById('toast-msg').textContent = msg;
-            document.getElementById('toast').classList.add('show');
-            setTimeout(() => document.getElementById('toast').classList.remove('show'), 2000);
+        function showToast(m) {
+            const t = document.getElementById('toast');
+            t.textContent = '✓ ' + m;
+            t.classList.add('show');
+            setTimeout(() => t.classList.remove('show'), 2000);
         }
-
-        // Offline detection
-        window.addEventListener('online', () => {
-            document.getElementById('offline-indicator').classList.remove('show');
-            showToast('Back online');
-        });
-        window.addEventListener('offline', () => {
-            document.getElementById('offline-indicator').classList.add('show');
-        });
 
         // Init
         load();
-        calcTotal();
-        checkInstallBanner();
+        calc();
         
-        if (document.getElementById('display-page').classList.contains('active')) {
-            updateStats();
-            render();
+        // If we have products, try to show install button after delay
+        if (products.length > 0) {
+            setTimeout(showInstallButton, 5000);
         }
     </script>
 </body>
