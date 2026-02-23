@@ -8,14 +8,24 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="PriceTrack Pro">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiUHJpY2VUcmFjayBQcm8iLCJzaG9ydF9uYW1lIjoiUHJpY2VUcmFjayIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjZjhmYWZjIiwidGhlbWVfY29sb3IiOiIjMjU2M2ViIiwib3JpZW50YXRpb24iOiJwb3J0cmFpdCIsImljb25zIjpbXX0=">
+    
+    <!-- Favicon/Icon for PWA -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%232563eb' rx='20' width='100' height='100'/><text x='50' y='65' font-size='50' text-anchor='middle' fill='white'>💰</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect fill='%232563eb' rx='20' width='100' height='100'/><text x='50' y='65' font-size='50' text-anchor='middle' fill='white'>💰</text></svg>">
+    
     <title>PriceTrack Pro</title>
-    <link rel="manifest" href="data:application/json;base64,eyJuYW1lIjoiUHJpY2VUcmFjayBQcm8iLCJzaG9ydF9uYW1lIjoiUHJpY2VUcmFjayIsInN0YXJ0X3VybCI6Ii4iLCJkaXNwbGF5Ijoic3RhbmRhbG9uZSIsImJhY2tncm91bmRfY29sb3IiOiIjZjhmYWZjIiwidGhlbWVfY29sb3IiOiIjMjU2M2ViIn0=">
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         :root {
@@ -30,8 +40,8 @@
             --text: #1e293b;
             --text-light: #64748b;
             --border: #e2e8f0;
-            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1);
         }
 
         body {
@@ -42,19 +52,20 @@
             min-height: 100vh;
             -webkit-font-smoothing: antialiased;
             touch-action: manipulation;
+            overscroll-behavior-y: none;
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 1rem;
+            padding-bottom: 5rem;
         }
 
         header {
             background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
             color: white;
-            padding: 1.5rem 0;
-            margin-bottom: 1.5rem;
+            padding: 1.25rem 1rem;
             box-shadow: var(--shadow-lg);
             position: sticky;
             top: 0;
@@ -62,17 +73,18 @@
         }
 
         header h1 {
-            text-align: center;
-            font-size: 1.75rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            letter-spacing: -0.025em;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
         }
 
         header p {
-            text-align: center;
             opacity: 0.9;
+            font-size: 0.85rem;
             margin-top: 0.25rem;
-            font-size: 0.9rem;
+            margin-left: 2rem;
         }
 
         .offline-indicator {
@@ -97,19 +109,19 @@
         .nav-tabs {
             display: flex;
             gap: 0.5rem;
-            margin-bottom: 1.5rem;
+            margin: 1rem 0;
             background: var(--card-bg);
             padding: 0.5rem;
             border-radius: 12px;
             box-shadow: var(--shadow);
             position: sticky;
-            top: 80px;
+            top: 70px;
             z-index: 99;
         }
 
         .nav-tab {
             flex: 1;
-            padding: 0.875rem 0.5rem;
+            padding: 0.75rem;
             border: none;
             background: transparent;
             color: var(--text-light);
@@ -117,14 +129,8 @@
             cursor: pointer;
             border-radius: 8px;
             transition: all 0.3s ease;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             text-align: center;
-            white-space: nowrap;
-        }
-
-        .nav-tab:hover, .nav-tab:active {
-            color: var(--primary);
-            background: rgba(37, 99, 235, 0.05);
         }
 
         .nav-tab.active {
@@ -150,9 +156,9 @@
         .card {
             background: var(--card-bg);
             border-radius: 16px;
-            padding: 1.5rem;
+            padding: 1.25rem;
             box-shadow: var(--shadow);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
         }
 
         .form-grid {
@@ -176,26 +182,23 @@
         .form-group label {
             font-weight: 600;
             margin-bottom: 0.5rem;
+            font-size: 0.85rem;
             color: var(--text);
-            font-size: 0.9rem;
         }
 
-        .form-group input, .form-group select {
+        .form-group input {
             padding: 0.875rem 1rem;
             border: 2px solid var(--border);
             border-radius: 10px;
-            font-size: 16px; /* Prevents zoom on iOS */
-            transition: all 0.3s ease;
+            font-size: 16px;
             background: var(--bg);
             width: 100%;
-            -webkit-appearance: none;
         }
 
-        .form-group input:focus, .form-group select:focus {
+        .form-group input:focus {
             outline: none;
             border-color: var(--primary);
             background: white;
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
         }
 
         .btn {
@@ -204,18 +207,17 @@
             border-radius: 10px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.2s;
             font-size: 1rem;
             display: inline-flex;
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
             width: 100%;
-            touch-action: manipulation;
         }
 
         .btn:active {
-            transform: scale(0.98);
+            transform: scale(0.96);
         }
 
         @media (min-width: 640px) {
@@ -227,11 +229,6 @@
         .btn-primary {
             background: var(--primary);
             color: white;
-            box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
-        }
-
-        .btn-primary:hover {
-            background: var(--primary-dark);
         }
 
         .btn-secondary {
@@ -239,54 +236,31 @@
             color: white;
         }
 
-        .btn-danger {
-            background: var(--danger);
-            color: white;
-        }
-
-        .btn-success {
-            background: var(--success);
-            color: white;
-        }
-
-        .btn-warning {
-            background: var(--warning);
-            color: white;
-        }
-
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        @media (min-width: 640px) {
-            .stats-grid {
-                grid-template-columns: repeat(4, 1fr);
-            }
+            gap: 0.75rem;
+            margin-bottom: 1rem;
         }
 
         .stat-card {
             background: var(--card-bg);
-            padding: 1rem;
+            padding: 0.875rem;
             border-radius: 12px;
             box-shadow: var(--shadow);
             border-left: 4px solid var(--primary);
         }
 
         .stat-card h3 {
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             color: var(--text-light);
             text-transform: uppercase;
-            letter-spacing: 0.05em;
             margin-bottom: 0.25rem;
         }
 
         .stat-card .value {
             font-size: 1.5rem;
             font-weight: 700;
-            color: var(--text);
         }
 
         .table-container {
@@ -294,81 +268,43 @@
             background: var(--card-bg);
             border-radius: 16px;
             box-shadow: var(--shadow);
-            -webkit-overflow-scrolling: touch;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            min-width: 800px;
-        }
-
-        thead {
-            background: linear-gradient(to right, #f8fafc, #f1f5f9);
+            min-width: 600px;
         }
 
         th {
-            padding: 0.875rem;
+            padding: 0.75rem;
             text-align: left;
-            font-weight: 600;
+            font-size: 0.7rem;
             color: var(--text-light);
             text-transform: uppercase;
-            font-size: 0.75rem;
-            letter-spacing: 0.05em;
             border-bottom: 2px solid var(--border);
-            white-space: nowrap;
+            font-weight: 600;
         }
 
         td {
-            padding: 0.875rem;
+            padding: 0.75rem;
             border-bottom: 1px solid var(--border);
-        }
-
-        tr:hover {
-            background: #f8fafc;
+            font-size: 0.9rem;
         }
 
         .price-tag {
-            display: inline-flex;
-            align-items: center;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 12px;
             font-weight: 600;
-            font-size: 0.875rem;
-            white-space: nowrap;
-        }
-
-        .price-selling {
+            font-size: 0.8rem;
             background: #d1fae5;
             color: #065f46;
-        }
-
-        .price-wholesale {
-            background: #dbeafe;
-            color: #1e40af;
-        }
-
-        .stock-display {
-            display: flex;
-            flex-direction: column;
-            gap: 0.25rem;
-        }
-
-        .stock-main {
-            font-weight: 700;
-            color: var(--text);
-            font-size: 1rem;
-        }
-
-        .stock-sub {
-            font-size: 0.75rem;
-            color: var(--text-light);
         }
 
         .actions {
             display: flex;
             gap: 0.5rem;
-            flex-wrap: wrap;
         }
 
         .btn-action {
@@ -377,13 +313,8 @@
             border-radius: 6px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.2s;
-            font-size: 0.875rem;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.25rem;
+            font-size: 0.8rem;
             flex: 1;
-            justify-content: center;
         }
 
         .btn-sell {
@@ -399,23 +330,14 @@
         .btn-icon {
             padding: 0.5rem;
             border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: all 0.2s;
             background: transparent;
+            cursor: pointer;
         }
 
         .empty-state {
             text-align: center;
-            padding: 3rem 1.5rem;
+            padding: 3rem 1rem;
             color: var(--text-light);
-        }
-
-        .empty-state svg {
-            width: 48px;
-            height: 48px;
-            margin-bottom: 1rem;
-            opacity: 0.3;
         }
 
         .toast {
@@ -423,51 +345,48 @@
             bottom: 1rem;
             left: 1rem;
             right: 1rem;
-            background: var(--text);
+            background: #1e293b;
             color: white;
             padding: 1rem;
-            border-radius: 10px;
-            box-shadow: var(--shadow-lg);
+            border-radius: 12px;
             display: none;
             align-items: center;
             gap: 0.75rem;
             z-index: 3000;
-            animation: slideUp 0.3s ease;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(100%); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
+            box-shadow: var(--shadow-lg);
         }
 
         .toast.show {
             display: flex;
         }
 
-        .search-bar {
-            margin-bottom: 1rem;
-            display: flex;
+        .install-banner {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--primary);
+            color: white;
+            padding: 1rem;
+            z-index: 2500;
+            display: none;
             flex-direction: column;
             gap: 0.75rem;
         }
 
-        @media (min-width: 640px) {
-            .search-bar {
-                flex-direction: row;
-            }
-        }
-
-        .search-bar input {
-            flex: 1;
-            padding: 0.875rem 1rem;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            font-size: 16px;
-        }
-
-        .export-buttons {
+        .install-banner.show {
             display: flex;
-            gap: 0.5rem;
+        }
+
+        .install-banner button {
+            background: white;
+            color: var(--primary);
+            border: none;
+            padding: 0.875rem;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            font-size: 1rem;
         }
 
         .modal {
@@ -475,21 +394,14 @@
             position: fixed;
             top: 0;
             left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
             z-index: 2000;
             justify-content: center;
             align-items: flex-end;
             padding: 1rem;
             padding-bottom: env(safe-area-inset-bottom, 1rem);
-        }
-
-        @media (min-width: 640px) {
-            .modal {
-                align-items: center;
-                padding-bottom: 1rem;
-            }
         }
 
         .modal.active {
@@ -498,61 +410,31 @@
 
         .modal-content {
             background: white;
-            padding: 1.5rem;
-            border-radius: 16px;
             width: 100%;
-            max-width: 450px;
-            max-height: 90vh;
-            overflow-y: auto;
-            box-shadow: var(--shadow-lg);
-            animation: modalSlide 0.3s ease;
+            max-width: 400px;
+            border-radius: 20px;
+            padding: 1.5rem;
+            animation: slideUp 0.3s ease;
         }
 
-        @keyframes modalSlide {
-            from { transform: translateY(20px); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-
-        .modal-header {
-            margin-bottom: 1rem;
-        }
-
-        .modal-header h3 {
-            font-size: 1.25rem;
-            color: var(--text);
-        }
-
-        .modal-body {
-            margin-bottom: 1rem;
-        }
-
-        .modal-footer {
-            display: flex;
-            gap: 0.75rem;
-            flex-direction: column;
-        }
-
-        @media (min-width: 640px) {
-            .modal-footer {
-                flex-direction: row;
-                justify-content: flex-end;
-            }
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
         }
 
         .sell-options {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 0.75rem;
-            margin-bottom: 1rem;
+            margin: 1rem 0;
         }
 
         .sell-option {
             border: 2px solid var(--border);
-            border-radius: 10px;
-            padding: 0.875rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            border-radius: 12px;
+            padding: 1rem;
             text-align: center;
+            cursor: pointer;
         }
 
         .sell-option.selected {
@@ -560,146 +442,132 @@
             background: #eff6ff;
         }
 
-        .sell-option h4 {
-            margin-bottom: 0.25rem;
-            color: var(--text);
-            font-size: 0.95rem;
-        }
-
-        .sell-option p {
-            font-size: 0.8rem;
-            color: var(--text-light);
-        }
-
-        .transaction-log {
-            margin-top: 0.25rem;
-            font-size: 0.7rem;
-            color: var(--text-light);
-        }
-
-        .install-prompt {
+        .manual-install {
             position: fixed;
-            bottom: 1rem;
-            left: 1rem;
-            right: 1rem;
-            background: var(--primary);
-            color: white;
-            padding: 1rem;
-            border-radius: 12px;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 1.5rem;
+            border-radius: 16px;
             box-shadow: var(--shadow-lg);
+            z-index: 3000;
             display: none;
-            z-index: 2500;
-            animation: slideUp 0.3s ease;
+            width: 90%;
+            max-width: 320px;
+            text-align: center;
         }
 
-        .install-prompt.show {
+        .manual-install.show {
             display: block;
         }
 
-        .install-prompt button {
-            margin-top: 0.75rem;
-            width: 100%;
-            padding: 0.75rem;
-            background: white;
-            color: var(--primary);
-            border: none;
-            border-radius: 8px;
-            font-weight: 600;
-            cursor: pointer;
+        .manual-install h3 {
+            margin-bottom: 1rem;
+            color: var(--text);
         }
 
-        .total-display {
-            background: #f0f9ff;
-            padding: 1rem;
-            border-radius: 8px;
-            margin-bottom: 1rem;
-            border-left: 4px solid var(--primary);
+        .manual-install p {
+            color: var(--text-light);
             font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 2999;
+            display: none;
+        }
+
+        .overlay.show {
+            display: block;
         }
     </style>
 </head>
 <body>
-    <div class="offline-indicator" id="offline-indicator">
-        Offline Mode - Data saved locally
+    <div class="offline-indicator" id="offline-indicator">📴 Offline Mode</div>
+    
+    <div class="overlay" id="overlay" onclick="closeManualInstall()"></div>
+    <div class="manual-install" id="manual-install">
+        <h3>📱 Add to Home Screen</h3>
+        <p id="install-instructions">Tap the menu (⋮) and select "Add to Home screen"</p>
+        <button class="btn btn-primary" onclick="closeManualInstall()" style="margin-top: 0.5rem;">Got it</button>
     </div>
 
     <header>
-        <div class="container">
-            <h1>PriceTrack Pro</h1>
+        <div class="container" style="padding: 0 1rem;">
+            <h1>💰 PriceTrack Pro</h1>
             <p>Offline Inventory Management</p>
         </div>
     </header>
 
     <div class="container">
         <div class="nav-tabs">
-            <button class="nav-tab active" onclick="showPage('form')">Add Product</button>
-            <button class="nav-tab" onclick="showPage('display')">View Inventory</button>
+            <button class="nav-tab active" onclick="showPage('form')">➕ Add</button>
+            <button class="nav-tab" onclick="showPage('display')">📦 Stock</button>
         </div>
 
         <!-- Form Page -->
         <div id="form-page" class="page active">
             <div class="card">
-                <h2 style="margin-bottom: 1rem; color: var(--text); font-size: 1.25rem;">Add New Product</h2>
+                <h2 style="margin-bottom: 1rem; font-size: 1.1rem;">New Product</h2>
                 <form id="product-form">
                     <div class="form-grid">
                         <div class="form-group">
-                            <label for="product-name">Product Name *</label>
-                            <input type="text" id="product-name" required placeholder="e.g., Premium Fabric">
+                            <label>Product Name</label>
+                            <input type="text" id="product-name" required placeholder="e.g. Rice">
                         </div>
                         <div class="form-group">
-                            <label for="units-per-bale">Units per Bale *</label>
-                            <input type="number" id="units-per-bale" step="1" min="1" required placeholder="20" value="20">
+                            <label>Units per Bale</label>
+                            <input type="number" id="units-per-bale" required value="20" min="1">
                         </div>
                         <div class="form-group">
-                            <label for="bale-quantity">Number of Bales *</label>
-                            <input type="number" id="bale-quantity" step="1" min="0" required placeholder="0" oninput="calculateTotalUnits()">
+                            <label>Bales in Stock</label>
+                            <input type="number" id="bale-quantity" required value="0" min="0" oninput="calcTotal()">
                         </div>
                         <div class="form-group">
-                            <label for="unit-quantity">Additional Units (Loose) *</label>
-                            <input type="number" id="unit-quantity" step="1" min="0" required placeholder="0" value="0" oninput="calculateTotalUnits()">
+                            <label>Loose Units</label>
+                            <input type="number" id="unit-quantity" required value="0" min="0" oninput="calcTotal()">
                         </div>
                         <div class="form-group">
-                            <label for="original-price">Cost Price per Unit ($) *</label>
-                            <input type="number" id="original-price" step="0.01" min="0" required placeholder="0.00">
+                            <label>Cost per Unit ($)</label>
+                            <input type="number" id="original-price" required value="0" min="0" step="0.01">
                         </div>
                         <div class="form-group">
-                            <label for="selling-price">Selling Price per Unit ($) *</label>
-                            <input type="number" id="selling-price" step="0.01" min="0" required placeholder="0.00">
+                            <label>Sell per Unit ($)</label>
+                            <input type="number" id="selling-price" required value="0" min="0" step="0.01">
                         </div>
                         <div class="form-group">
-                            <label for="bale-selling-price">Selling Price per Bale ($) *</label>
-                            <input type="number" id="bale-selling-price" step="0.01" min="0" required placeholder="0.00">
+                            <label>Sell per Bale ($)</label>
+                            <input type="number" id="bale-selling-price" required value="0" min="0" step="0.01">
                         </div>
                         <div class="form-group">
-                            <label for="wholesale-price">Wholesale Price per Unit ($) *</label>
-                            <input type="number" id="wholesale-price" step="0.01" min="0" required placeholder="0.00">
+                            <label>Wholesale ($)</label>
+                            <input type="number" id="wholesale-price" required value="0" min="0" step="0.01">
                         </div>
                     </div>
                     
-                    <div class="total-display">
-                        <strong>Total Stock:</strong> <span id="total-units-display" style="font-size: 1.1rem; font-weight: 700; color: var(--primary);">0 units</span>
+                    <div style="background: #eff6ff; padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                        <strong>Total:</strong> <span id="total-display" style="font-size: 1.2rem; color: var(--primary);">0 units</span>
                     </div>
 
-                    <div style="display: flex; gap: 0.75rem;">
-                        <button type="submit" class="btn btn-primary">
-                            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
-                            </svg>
-                            Add Product
-                        </button>
-                        <button type="button" class="btn btn-secondary" onclick="clearForm()">Clear</button>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <button type="submit" class="btn btn-primary" style="flex: 2;">💾 Save Product</button>
+                        <button type="button" class="btn btn-secondary" onclick="clearForm()" style="flex: 1;">Clear</button>
                     </div>
                 </form>
             </div>
 
-            <div class="card" style="background: linear-gradient(to right, #eff6ff, #ffffff);">
-                <h3 style="margin-bottom: 0.75rem; color: var(--primary); font-size: 1.1rem;">Quick Guide</h3>
-                <ul style="color: var(--text-light); padding-left: 1.25rem; font-size: 0.9rem; line-height: 1.8;">
-                    <li>Define units per bale (e.g., 20 units = 1 bale)</li>
-                    <li>Enter bales and loose units separately</li>
-                    <li>Sell by unit or by whole bale</li>
-                    <li>All data saves offline automatically</li>
-                </ul>
+            <div class="card" style="background: #f0fdf4;">
+                <p style="font-size: 0.85rem; color: var(--text-light);">
+                    💡 <strong>Tip:</strong> This app works fully offline. Data is saved on your device.
+                </p>
             </div>
         </div>
 
@@ -708,264 +576,278 @@
             <div class="stats-grid">
                 <div class="stat-card">
                     <h3>Products</h3>
-                    <div class="value" id="total-products">0</div>
+                    <div class="value" id="stat-products">0</div>
                 </div>
-                <div class="stat-card" style="border-left-color: var(--success);">
+                <div class="stat-card" style="border-color: var(--success);">
                     <h3>Bales</h3>
-                    <div class="value" id="total-bales">0</div>
+                    <div class="value" id="stat-bales">0</div>
                 </div>
-                <div class="stat-card" style="border-left-color: var(--warning);">
-                    <h3>Loose Units</h3>
-                    <div class="value" id="total-loose">0</div>
+                <div class="stat-card" style="border-color: var(--warning);">
+                    <h3>Units</h3>
+                    <div class="value" id="stat-units">0</div>
                 </div>
-                <div class="stat-card" style="border-left-color: var(--primary);">
+                <div class="stat-card" style="border-color: var(--primary);">
                     <h3>Value</h3>
-                    <div class="value" id="inventory-value">$0</div>
+                    <div class="value" id="stat-value">$0</div>
                 </div>
             </div>
 
             <div class="card">
-                <div class="search-bar">
-                    <input type="text" id="search-input" placeholder="Search products..." onkeyup="filterProducts()">
-                    <div class="export-buttons">
-                        <button class="btn btn-secondary" onclick="exportToJSON()" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
-                            Export
-                        </button>
-                        <button class="btn btn-secondary" onclick="document.getElementById('import-file').click()" style="padding: 0.5rem 1rem; font-size: 0.875rem;">
-                            Import
-                        </button>
-                        <input type="file" id="import-file" accept=".json" style="display: none;" onchange="importFromJSON(this)">
-                    </div>
+                <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                    <input type="text" id="search" placeholder="🔍 Search..." onkeyup="doSearch()" style="flex: 1; padding: 0.75rem; border: 2px solid var(--border); border-radius: 10px; font-size: 16px;">
+                    <button onclick="exportData()" class="btn btn-secondary" style="width: auto; padding: 0.75rem;">📤</button>
+                    <button onclick="document.getElementById('file-input').click()" class="btn btn-secondary" style="width: auto; padding: 0.75rem;">📥</button>
+                    <input type="file" id="file-input" accept=".json" style="display: none;" onchange="importData(this)">
                 </div>
 
                 <div class="table-container">
-                    <table id="products-table">
+                    <table>
                         <thead>
                             <tr>
-                                <th>Product</th>
+                                <th>Item</th>
                                 <th>Stock</th>
-                                <th>Unit $</th>
-                                <th>Bale $</th>
-                                <th>Actions</th>
+                                <th>Prices</th>
+                                <th>Sell/Add</th>
                                 <th>Edit</th>
                             </tr>
                         </thead>
-                        <tbody id="table-body">
-                        </tbody>
+                        <tbody id="tbody"></tbody>
                     </table>
-                    <div id="empty-state" class="empty-state" style="display: none;">
-                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4"></path>
-                        </svg>
-                        <h3>No products</h3>
-                        <p>Add products to see them here</p>
+                    <div id="empty" class="empty-state" style="display: none;">
+                        <p>No products yet</p>
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Install Banner -->
+    <div class="install-banner" id="install-banner">
+        <div style="display: flex; align-items: center; gap: 0.75rem;">
+            <span style="font-size: 2rem;">💰</span>
+            <div>
+                <strong>Install PriceTrack Pro</strong>
+                <p style="font-size: 0.85rem; opacity: 0.9; margin: 0;">Add to home screen for quick access</p>
+            </div>
+        </div>
+        <div style="display: flex; gap: 0.5rem;">
+            <button onclick="installApp()" style="flex: 1;">Install Now</button>
+            <button onclick="dismissInstall()" style="flex: 1; background: rgba(255,255,255,0.2); color: white;">Later</button>
         </div>
     </div>
 
     <!-- Transaction Modal -->
-    <div id="transaction-modal" class="modal">
+    <div class="modal" id="modal">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="modal-title">Sell Product</h3>
+            <h3 id="modal-title" style="margin-bottom: 0.5rem;">Sell</h3>
+            <p id="modal-product" style="font-weight: 600; margin-bottom: 0.25rem;"></p>
+            <p id="modal-stock" style="color: var(--text-light); font-size: 0.85rem; margin-bottom: 1rem;"></p>
+            
+            <div class="sell-options" id="sell-options">
+                <div class="sell-option selected" onclick="setSellType('unit')" id="opt-unit">
+                    <div style="font-size: 1.5rem;">📦</div>
+                    <div style="font-weight: 600; font-size: 0.9rem;">By Unit</div>
+                </div>
+                <div class="sell-option" onclick="setSellType('bale')" id="opt-bale">
+                    <div style="font-size: 1.5rem;">🎁</div>
+                    <div style="font-weight: 600; font-size: 0.9rem;">By Bale</div>
+                </div>
             </div>
-            <div class="modal-body">
-                <p id="modal-product-name" style="margin-bottom: 0.25rem; font-weight: 600;"></p>
-                <p id="modal-current-stock" style="margin-bottom: 1rem; color: var(--text-light); font-size: 0.875rem;"></p>
-                
-                <div id="sell-options" class="sell-options" style="display: none;">
-                    <div class="sell-option selected" onclick="selectSellType('unit')" id="option-unit">
-                        <h4>By Unit</h4>
-                        <p>Single items</p>
-                    </div>
-                    <div class="sell-option" onclick="selectSellType('bale')" id="option-bale">
-                        <h4>By Bale</h4>
-                        <p id="bale-info">Bulk</p>
-                    </div>
-                </div>
 
-                <div class="form-group">
-                    <label for="transaction-quantity">Quantity:</label>
-                    <input type="number" id="transaction-quantity" min="1" value="1" style="margin-top: 0.5rem;">
-                    <p id="quantity-help" style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.5rem;"></p>
-                </div>
-
-                <div id="total-calculation" style="margin-top: 1rem; padding: 0.75rem; background: #f0f9ff; border-radius: 8px; display: none; font-size: 0.9rem;">
-                    <strong>Total:</strong> <span id="total-amount" style="font-weight: 700; color: var(--primary);"></span>
-                </div>
-
-                <p id="modal-error" style="color: var(--danger); margin-top: 0.5rem; font-size: 0.875rem; display: none;"></p>
+            <div class="form-group" style="margin: 1rem 0;">
+                <label>Quantity</label>
+                <input type="number" id="tx-qty" value="1" min="1" style="text-align: center; font-size: 1.25rem; font-weight: 700;">
+                <p id="tx-hint" style="font-size: 0.8rem; color: var(--text-light); margin-top: 0.5rem;"></p>
             </div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
-                <button class="btn btn-primary" id="modal-confirm-btn" onclick="confirmTransaction()">Confirm</button>
+
+            <div id="tx-total" style="background: #eff6ff; padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; display: none; text-align: center;">
+                <span style="color: var(--text-light); font-size: 0.85rem;">Total: </span>
+                <span id="tx-amount" style="font-size: 1.25rem; font-weight: 700; color: var(--primary);"></span>
+            </div>
+
+            <p id="tx-error" style="color: var(--danger); font-size: 0.85rem; display: none; margin-bottom: 1rem;"></p>
+
+            <div style="display: flex; gap: 0.5rem;">
+                <button onclick="closeModal()" class="btn btn-secondary">Cancel</button>
+                <button onclick="confirmTx()" class="btn btn-primary" id="confirm-btn">Confirm</button>
             </div>
         </div>
     </div>
 
-    <div class="install-prompt" id="install-prompt">
-        <strong>Install PriceTrack Pro</strong>
-        <p style="font-size: 0.875rem; margin-top: 0.25rem; opacity: 0.9;">Add to home screen for offline access</p>
-        <button onclick="installApp()">Install App</button>
-    </div>
-
-    <div id="toast" class="toast">
-        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-        </svg>
-        <span id="toast-message">Success</span>
+    <div class="toast" id="toast">
+        <span>✓</span>
+        <span id="toast-msg">Done</span>
     </div>
 
     <script>
-        // Service Worker Registration for Offline Support
+        // ==================== SERVICE WORKER ====================
         const swCode = `
-            const CACHE_NAME = 'pricetrack-v1';
-            const urlsToCache = [
-                '/',
-                window.location.href
+            const CACHE = 'pricetrack-v2';
+            const ASSETS = [
+                self.location.href
             ];
-
-            self.addEventListener('install', event => {
-                event.waitUntil(
-                    caches.open(CACHE_NAME)
-                        .then(cache => cache.addAll(urlsToCache))
+            
+            self.addEventListener('install', e => {
+                e.waitUntil(
+                    caches.open(CACHE).then(cache => cache.addAll(ASSETS))
                 );
                 self.skipWaiting();
             });
-
-            self.addEventListener('activate', event => {
-                event.waitUntil(self.clients.claim());
+            
+            self.addEventListener('activate', e => {
+                e.waitUntil(self.clients.claim());
             });
-
-            self.addEventListener('fetch', event => {
-                event.respondWith(
-                    caches.match(event.request)
-                        .then(response => {
-                            if (response) return response;
-                            return fetch(event.request).catch(() => {
-                                return new Response('Offline');
-                            });
-                        })
+            
+            self.addEventListener('fetch', e => {
+                e.respondWith(
+                    caches.match(e.request).then(r => r || fetch(e.request))
                 );
             });
         `;
 
         if ('serviceWorker' in navigator) {
-            const blob = new Blob([swCode], { type: 'application/javascript' });
-            const swUrl = URL.createObjectURL(blob);
-            navigator.serviceWorker.register(swUrl)
-                .then(reg => console.log('SW registered'))
-                .catch(err => console.log('SW failed', err));
+            navigator.serviceWorker.register(
+                URL.createObjectURL(new Blob([swCode], {type: 'application/javascript'}))
+            ).catch(() => console.log('SW skip'));
         }
 
-        // Data Management
+        // ==================== DATA ====================
         let products = [];
-        let currentTransaction = null;
-        let deferredPrompt = null;
+        let currentTx = null;
+        let installPrompt = null;
 
-        // Load from localStorage
-        function loadProducts() {
+        function load() {
             try {
-                const stored = localStorage.getItem('priceTrackProducts');
-                if (stored) {
-                    products = JSON.parse(stored);
-                    if (!Array.isArray(products)) products = [];
-                }
-            } catch (e) {
-                products = [];
-            }
-            console.log('Loaded:', products.length, 'products');
+                const data = localStorage.getItem('ptp_products');
+                if (data) products = JSON.parse(data);
+            } catch(e) { products = []; }
         }
 
-        // Save to localStorage
-        function saveProducts() {
-            try {
-                localStorage.setItem('priceTrackProducts', JSON.stringify(products));
-                updateStats();
-                renderTable();
-            } catch (e) {
-                showToast('Error saving data');
-            }
+        function save() {
+            localStorage.setItem('ptp_products', JSON.stringify(products));
+            updateStats();
+            render();
         }
 
-        // Offline detection
-        function updateOnlineStatus() {
-            const indicator = document.getElementById('offline-indicator');
-            if (!navigator.onLine) {
-                indicator.classList.add('show');
-            } else {
-                indicator.classList.remove('show');
-            }
-        }
-
-        window.addEventListener('online', updateOnlineStatus);
-        window.addEventListener('offline', updateOnlineStatus);
-        updateOnlineStatus();
-
-        // Install prompt
+        // ==================== INSTALL PROMPT ====================
+        
+        // Capture the install prompt
         window.addEventListener('beforeinstallprompt', (e) => {
             e.preventDefault();
-            deferredPrompt = e;
-            if (!window.matchMedia('(display-mode: standalone)').matches) {
-                setTimeout(() => {
-                    document.getElementById('install-prompt').classList.add('show');
-                }, 2000);
-            }
+            installPrompt = e;
+            console.log('Install prompt captured');
+            
+            // Show banner after 3 seconds if not in standalone
+            setTimeout(() => {
+                if (!isStandalone()) {
+                    document.getElementById('install-banner').classList.add('show');
+                }
+            }, 3000);
         });
+
+        function isStandalone() {
+            return window.matchMedia('(display-mode: standalone)').matches || 
+                   window.navigator.standalone === true ||
+                   document.referrer.includes('android-app://');
+        }
 
         function installApp() {
-            if (deferredPrompt) {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then(() => {
-                    document.getElementById('install-prompt').classList.remove('show');
-                    deferredPrompt = null;
+            if (installPrompt) {
+                installPrompt.prompt();
+                installPrompt.userChoice.then((result) => {
+                    if (result.outcome === 'accepted') {
+                        showToast('App installed!');
+                    }
+                    installPrompt = null;
+                    document.getElementById('install-banner').classList.remove('show');
                 });
+            } else {
+                // Show manual instructions
+                showManualInstall();
             }
         }
 
-        // Calculate total units
-        function calculateTotalUnits() {
-            const unitsPerBale = parseInt(document.getElementById('units-per-bale').value) || 0;
-            const bales = parseInt(document.getElementById('bale-quantity').value) || 0;
-            const loose = parseInt(document.getElementById('unit-quantity').value) || 0;
-            const total = (bales * unitsPerBale) + loose;
-            document.getElementById('total-units-display').textContent = `${total} units (${bales} b + ${loose} u)`;
+        function dismissInstall() {
+            document.getElementById('install-banner').classList.remove('show');
+            localStorage.setItem('ptp_dismissed', Date.now());
         }
 
-        // Form submit
-        document.getElementById('product-form').addEventListener('submit', function(e) {
+        function showManualInstall() {
+            const ua = navigator.userAgent.toLowerCase();
+            let msg = 'Tap menu (⋮) and select "Add to Home screen"';
+            
+            if (ua.includes('samsung')) {
+                msg = 'Tap menu ⋮ → "Add page to" → "Home screen"';
+            } else if (ua.includes('firefox')) {
+                msg = 'Tap ⋮ → "Add to Home screen"';
+            } else if (ua.includes('opera')) {
+                msg = 'Tap + button in address bar';
+            } else if (/iphone|ipad|ipod/.test(ua)) {
+                msg = 'Tap Share button ⬆️ then "Add to Home Screen"';
+            }
+            
+            document.getElementById('install-instructions').textContent = msg;
+            document.getElementById('manual-install').classList.add('show');
+            document.getElementById('overlay').classList.add('show');
+        }
+
+        function closeManualInstall() {
+            document.getElementById('manual-install').classList.remove('show');
+            document.getElementById('overlay').classList.remove('show');
+        }
+
+        // Check if we should show install (not dismissed in last 7 days)
+        function checkInstallBanner() {
+            const dismissed = localStorage.getItem('ptp_dismissed');
+            if (dismissed && Date.now() - parseInt(dismissed) < 7 * 24 * 60 * 60 * 1000) return;
+            
+            if (!isStandalone() && !installPrompt) {
+                // Show manual install hint after 5 seconds
+                setTimeout(() => {
+                    if (products.length > 0) { // Only show if they have data
+                        showManualInstall();
+                    }
+                }, 5000);
+            }
+        }
+
+        // ==================== UI ====================
+        function calcTotal() {
+            const upb = parseInt(document.getElementById('units-per-bale').value) || 1;
+            const bales = parseInt(document.getElementById('bale-quantity').value) || 0;
+            const units = parseInt(document.getElementById('unit-quantity').value) || 0;
+            const total = (bales * upb) + units;
+            document.getElementById('total-display').textContent = `${total} units (${bales}b+${units}u)`;
+        }
+
+        document.getElementById('product-form').onsubmit = (e) => {
             e.preventDefault();
             
-            const product = {
+            const p = {
                 id: Date.now(),
-                name: document.getElementById('product-name').value.trim(),
+                name: document.getElementById('product-name').value,
                 unitsPerBale: parseInt(document.getElementById('units-per-bale').value) || 1,
-                baleQuantity: parseInt(document.getElementById('bale-quantity').value) || 0,
-                unitQuantity: parseInt(document.getElementById('unit-quantity').value) || 0,
-                originalPrice: parseFloat(document.getElementById('original-price').value) || 0,
-                sellingPrice: parseFloat(document.getElementById('selling-price').value) || 0,
-                baleSellingPrice: parseFloat(document.getElementById('bale-selling-price').value) || 0,
-                wholesalePrice: parseFloat(document.getElementById('wholesale-price').value) || 0,
-                createdAt: new Date().toISOString(),
-                transactions: []
+                baleQty: parseInt(document.getElementById('bale-quantity').value) || 0,
+                unitQty: parseInt(document.getElementById('unit-quantity').value) || 0,
+                cost: parseFloat(document.getElementById('original-price').value) || 0,
+                unitPrice: parseFloat(document.getElementById('selling-price').value) || 0,
+                balePrice: parseFloat(document.getElementById('bale-selling-price').value) || 0,
+                wholesale: parseFloat(document.getElementById('wholesale-price').value) || 0,
+                txs: []
             };
-
-            products.push(product);
-            saveProducts();
-            showToast(`Added: ${product.name}`);
+            
+            products.push(p);
+            save();
+            showToast(`Saved: ${p.name}`);
             clearForm();
-        });
+        };
 
         function clearForm() {
             document.getElementById('product-form').reset();
             document.getElementById('units-per-bale').value = 20;
-            document.getElementById('unit-quantity').value = 0;
-            calculateTotalUnits();
+            calcTotal();
         }
 
-        // Navigation
         function showPage(page) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-tab').forEach((t, i) => {
@@ -977,284 +859,268 @@
             } else {
                 document.getElementById('display-page').classList.add('active');
                 updateStats();
-                renderTable();
+                render();
             }
         }
 
         function formatStock(p) {
-            const bales = p.baleQuantity || 0;
-            const units = p.unitQuantity || 0;
-            if (bales > 0 && units > 0) return `${bales}b ${units}u`;
-            if (bales > 0) return `${bales} bales`;
-            if (units > 0) return `${units} units`;
-            return 'Out of stock';
+            if (p.baleQty > 0 && p.unitQty > 0) return `${p.baleQty}b ${p.unitQty}u`;
+            if (p.baleQty > 0) return `${p.baleQty} bales`;
+            if (p.unitQty > 0) return `${p.unitQty} units`;
+            return '❌ Out';
         }
 
-        function getTotalUnits(p) {
-            return ((p.baleQuantity || 0) * (p.unitsPerBale || 1)) + (p.unitQuantity || 0);
+        function totalUnits(p) {
+            return (p.baleQty * p.unitsPerBale) + p.unitQty;
         }
 
-        function renderTable(filtered) {
-            const data = filtered !== undefined ? filtered : products;
-            const tbody = document.getElementById('table-body');
-            const empty = document.getElementById('empty-state');
+        function render(filtered) {
+            const data = filtered || products;
+            const tbody = document.getElementById('tbody');
             
-            if (!Array.isArray(data) || data.length === 0) {
+            if (!data.length) {
                 tbody.innerHTML = '';
-                empty.style.display = 'block';
+                document.getElementById('empty').style.display = 'block';
                 return;
             }
             
-            empty.style.display = 'none';
+            document.getElementById('empty').style.display = 'none';
             tbody.innerHTML = data.map(p => {
-                const total = getTotalUnits(p);
-                const stock = formatStock(p);
-                const lastTx = p.transactions?.length ? p.transactions[p.transactions.length - 1] : null;
-                const lastTxText = lastTx ? `<div class="transaction-log">${lastTx.type} ${lastTx.quantity}${lastTx.sellType?.[0] || ''}</div>` : '';
+                const total = totalUnits(p);
+                const lastTx = p.txs?.length ? p.txs[p.txs.length - 1] : null;
                 
                 return `
                     <tr>
                         <td>
-                            <div style="font-weight: 600;">${escapeHtml(p.name)}</div>
+                            <div style="font-weight: 600;">${escape(p.name)}</div>
                             <div style="font-size: 0.75rem; color: var(--text-light);">${p.unitsPerBale}u/bale</div>
-                            ${lastTxText}
+                            ${lastTx ? `<div style="font-size: 0.7rem; color: var(--text-light);">${lastTx.type} ${lastTx.qty}${lastTx.sellType||''}</div>` : ''}
                         </td>
                         <td>
-                            <div style="font-weight: 700; ${total === 0 ? 'color: var(--danger);' : ''}">${stock}</div>
+                            <div style="font-weight: 700; ${total===0?'color:var(--danger);':''}">${formatStock(p)}</div>
                             <div style="font-size: 0.75rem; color: var(--text-light);">${total} total</div>
                         </td>
-                        <td><span class="price-tag price-selling">$${(p.sellingPrice || 0).toFixed(2)}</span></td>
-                        <td><span class="price-tag" style="background: #e0e7ff; color: #3730a3;">$${(p.baleSellingPrice || 0).toFixed(2)}</span></td>
+                        <td>
+                            <div class="price-tag">$${p.unitPrice.toFixed(2)}</div>
+                            <div style="font-size: 0.75rem; color: var(--text-light); margin-top: 0.25rem;">Bale: $${p.balePrice.toFixed(2)}</div>
+                        </td>
                         <td>
                             <div class="actions">
-                                <button class="btn-action btn-sell" onclick="openTransactionModal(${p.id}, 'sell')" ${total === 0 ? 'disabled style="opacity: 0.5;"' : ''}>
-                                    Sell
-                                </button>
-                                <button class="btn-action btn-restock" onclick="openTransactionModal(${p.id}, 'restock')">
-                                    +Stock
-                                </button>
+                                <button class="btn-action btn-sell" onclick="openSell(${p.id})" ${total===0?'disabled style="opacity:0.4;"':''}>Sell</button>
+                                <button class="btn-action btn-restock" onclick="openRestock(${p.id})">+Bales</button>
                             </div>
                         </td>
                         <td>
-                            <button class="btn-icon" onclick="editProduct(${p.id})" style="color: var(--primary);">
-                                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                </svg>
-                            </button>
-                            <button class="btn-icon" onclick="deleteProduct(${p.id})" style="color: var(--danger);">
-                                <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                </svg>
-                            </button>
+                            <button class="btn-icon" onclick="editProduct(${p.id})" style="color: var(--primary);">✏️</button>
+                            <button class="btn-icon" onclick="deleteProduct(${p.id})" style="color: var(--danger);">🗑️</button>
                         </td>
                     </tr>
                 `;
             }).join('');
         }
 
-        function openTransactionModal(id, type) {
+        function openSell(id) {
             const p = products.find(x => x.id === id);
-            if (!p) return;
+            currentTx = { id, type: 'sell', sellType: 'unit' };
             
-            currentTransaction = { id, type, sellType: type === 'sell' ? 'unit' : null };
-            document.getElementById('modal-product-name').textContent = p.name;
-            document.getElementById('modal-current-stock').textContent = `Stock: ${formatStock(p)}`;
-            document.getElementById('transaction-quantity').value = 1;
-            document.getElementById('modal-error').style.display = 'none';
-            document.getElementById('total-calculation').style.display = 'none';
+            document.getElementById('modal-title').textContent = 'Sell Product';
+            document.getElementById('modal-product').textContent = p.name;
+            document.getElementById('modal-stock').textContent = `Stock: ${formatStock(p)}`;
+            document.getElementById('sell-options').style.display = 'grid';
+            document.getElementById('tx-qty').value = 1;
+            document.getElementById('tx-error').style.display = 'none';
             
-            if (type === 'sell') {
-                document.getElementById('modal-title').textContent = 'Sell Product';
-                document.getElementById('sell-options').style.display = 'grid';
-                document.getElementById('bale-info').textContent = `${p.unitsPerBale} units`;
-                selectSellType('unit');
-            } else {
-                document.getElementById('modal-title').textContent = 'Restock (Bales)';
-                document.getElementById('sell-options').style.display = 'none';
-                document.getElementById('transaction-type').textContent = 'restock';
-                document.getElementById('quantity-help').textContent = `Add bales to stock`;
-            }
-            
-            document.getElementById('transaction-quantity').oninput = updateTotal;
-            document.getElementById('transaction-modal').classList.add('active');
-            updateTotal();
+            setSellType('unit');
+            document.getElementById('modal').classList.add('active');
+            updateTxTotal();
         }
 
-        function selectSellType(type) {
-            currentTransaction.sellType = type;
+        function openRestock(id) {
+            const p = products.find(x => x.id === id);
+            currentTx = { id, type: 'restock' };
+            
+            document.getElementById('modal-title').textContent = 'Restock (Bales)';
+            document.getElementById('modal-product').textContent = p.name;
+            document.getElementById('modal-stock').textContent = `Current: ${formatStock(p)}`;
+            document.getElementById('sell-options').style.display = 'none';
+            document.getElementById('tx-qty').value = 1;
+            document.getElementById('tx-hint').textContent = 'Enter bales to add';
+            document.getElementById('tx-error').style.display = 'none';
+            
+            document.getElementById('modal').classList.add('active');
+            updateTxTotal();
+        }
+
+        function setSellType(type) {
+            currentTx.sellType = type;
             document.querySelectorAll('.sell-option').forEach(el => el.classList.remove('selected'));
-            document.getElementById(`option-${type}`).classList.add('selected');
+            document.getElementById(`opt-${type}`).classList.add('selected');
             
-            const p = products.find(x => x.id === currentTransaction.id);
+            const p = products.find(x => x.id === currentTx.id);
             if (type === 'unit') {
-                document.getElementById('quantity-help').textContent = `Available: ${getTotalUnits(p)} units`;
+                document.getElementById('tx-hint').textContent = `Available: ${totalUnits(p)} units`;
             } else {
-                document.getElementById('quantity-help').textContent = `Available: ${p.baleQuantity || 0} bales`;
+                document.getElementById('tx-hint').textContent = `Available: ${p.baleQty} bales`;
             }
-            updateTotal();
+            updateTxTotal();
         }
 
-        function updateTotal() {
-            const qty = parseInt(document.getElementById('transaction-quantity').value) || 0;
-            const p = products.find(x => x.id === currentTransaction.id);
-            const div = document.getElementById('total-calculation');
+        document.getElementById('tx-qty').oninput = updateTxTotal;
+
+        function updateTxTotal() {
+            const qty = parseInt(document.getElementById('tx-qty').value) || 0;
+            const p = products.find(x => x.id === currentTx.id);
             
             if (qty > 0) {
-                div.style.display = 'block';
                 let total = 0;
-                if (currentTransaction.type === 'sell') {
-                    total = currentTransaction.sellType === 'unit' 
-                        ? qty * (p.sellingPrice || 0)
-                        : qty * (p.baleSellingPrice || 0);
+                if (currentTx.type === 'sell') {
+                    total = currentTx.sellType === 'unit' 
+                        ? qty * p.unitPrice 
+                        : qty * p.balePrice;
                 } else {
-                    total = qty * (p.unitsPerBale || 1) * (p.originalPrice || 0);
+                    total = qty * p.unitsPerBale * p.cost;
                 }
-                document.getElementById('total-amount').textContent = '$' + total.toFixed(2);
+                document.getElementById('tx-total').style.display = 'block';
+                document.getElementById('tx-amount').textContent = '$' + total.toFixed(2);
             } else {
-                div.style.display = 'none';
+                document.getElementById('tx-total').style.display = 'none';
             }
         }
 
         function closeModal() {
-            document.getElementById('transaction-modal').classList.remove('active');
-            currentTransaction = null;
+            document.getElementById('modal').classList.remove('active');
+            currentTx = null;
         }
 
-        function confirmTransaction() {
-            if (!currentTransaction) return;
-            
-            const qty = parseInt(document.getElementById('transaction-quantity').value);
-            const err = document.getElementById('modal-error');
-            const p = products.find(x => x.id === currentTransaction.id);
+        function confirmTx() {
+            const qty = parseInt(document.getElementById('tx-qty').value);
+            const err = document.getElementById('tx-error');
+            const p = products.find(x => x.id === currentTx.id);
             
             if (!qty || qty < 1) {
-                err.textContent = 'Enter valid quantity';
+                err.textContent = 'Enter quantity';
                 err.style.display = 'block';
                 return;
             }
             
-            if (currentTransaction.type === 'sell') {
-                if (currentTransaction.sellType === 'unit') {
-                    const available = getTotalUnits(p);
-                    if (qty > available) {
-                        err.textContent = `Only ${available} available`;
+            if (currentTx.type === 'sell') {
+                if (currentTx.sellType === 'unit') {
+                    const avail = totalUnits(p);
+                    if (qty > avail) {
+                        err.textContent = `Only ${avail} available`;
                         err.style.display = 'block';
                         return;
                     }
                     
-                    let remaining = qty;
-                    if ((p.unitQuantity || 0) >= remaining) {
-                        p.unitQuantity -= remaining;
+                    let rem = qty;
+                    if (p.unitQty >= rem) {
+                        p.unitQty -= rem;
                     } else {
-                        remaining -= (p.unitQuantity || 0);
-                        p.unitQuantity = 0;
-                        while (remaining > 0 && (p.baleQuantity || 0) > 0) {
-                            p.baleQuantity--;
-                            p.unitQuantity = (p.unitQuantity || 0) + (p.unitsPerBale || 1);
-                            if (p.unitQuantity >= remaining) {
-                                p.unitQuantity -= remaining;
-                                remaining = 0;
+                        rem -= p.unitQty;
+                        p.unitQty = 0;
+                        while (rem > 0 && p.baleQty > 0) {
+                            p.baleQty--;
+                            p.unitQty = p.unitsPerBale;
+                            if (p.unitQty >= rem) {
+                                p.unitQty -= rem;
+                                rem = 0;
                             } else {
-                                remaining -= p.unitQuantity;
-                                p.unitQuantity = 0;
+                                rem -= p.unitQty;
+                                p.unitQty = 0;
                             }
                         }
                     }
                     showToast(`Sold ${qty} units`);
                 } else {
-                    if (qty > (p.baleQuantity || 0)) {
-                        err.textContent = `Only ${p.baleQuantity || 0} bales available`;
+                    if (qty > p.baleQty) {
+                        err.textContent = `Only ${p.baleQty} bales`;
                         err.style.display = 'block';
                         return;
                     }
-                    p.baleQuantity = (p.baleQuantity || 0) - qty;
+                    p.baleQty -= qty;
                     showToast(`Sold ${qty} bales`);
                 }
             } else {
-                p.baleQuantity = (p.baleQuantity || 0) + qty;
-                showToast(`Restocked ${qty} bales`);
+                p.baleQty += qty;
+                showToast(`Added ${qty} bales`);
             }
             
-            if (!p.transactions) p.transactions = [];
-            p.transactions.push({
-                type: currentTransaction.type,
-                sellType: currentTransaction.sellType,
-                quantity: qty,
+            if (!p.txs) p.txs = [];
+            p.txs.push({
+                type: currentTx.type,
+                sellType: currentTx.sellType,
+                qty: qty,
                 date: new Date().toLocaleDateString()
             });
             
-            saveProducts();
+            save();
             closeModal();
         }
 
         function updateStats() {
-            document.getElementById('total-products').textContent = products.length;
-            document.getElementById('total-bales').textContent = products.reduce((a, p) => a + (p.baleQuantity || 0), 0);
-            document.getElementById('total-loose').textContent = products.reduce((a, p) => a + (p.unitQuantity || 0), 0);
-            const value = products.reduce((a, p) => a + ((p.originalPrice || 0) * getTotalUnits(p)), 0);
-            document.getElementById('inventory-value').textContent = '$' + value.toLocaleString();
+            document.getElementById('stat-products').textContent = products.length;
+            document.getElementById('stat-bales').textContent = products.reduce((a,p) => a + p.baleQty, 0);
+            document.getElementById('stat-units').textContent = products.reduce((a,p) => a + p.unitQty, 0);
+            const val = products.reduce((a,p) => a + (p.cost * totalUnits(p)), 0);
+            document.getElementById('stat-value').textContent = '$' + val.toLocaleString();
         }
 
-        function filterProducts() {
-            const term = document.getElementById('search-input').value.toLowerCase();
-            const filtered = term ? products.filter(p => p.name?.toLowerCase().includes(term)) : products;
-            renderTable(filtered);
+        function doSearch() {
+            const term = document.getElementById('search').value.toLowerCase();
+            const filtered = term ? products.filter(p => p.name.toLowerCase().includes(term)) : products;
+            render(filtered);
         }
 
         function deleteProduct(id) {
-            if (confirm('Delete this product?')) {
+            if (confirm('Delete?')) {
                 products = products.filter(p => p.id !== id);
-                saveProducts();
+                save();
                 showToast('Deleted');
             }
         }
 
         function editProduct(id) {
             const p = products.find(x => x.id === id);
-            if (!p) return;
+            document.getElementById('product-name').value = p.name;
+            document.getElementById('units-per-bale').value = p.unitsPerBale;
+            document.getElementById('bale-quantity').value = p.baleQty;
+            document.getElementById('unit-quantity').value = p.unitQty;
+            document.getElementById('original-price').value = p.cost;
+            document.getElementById('selling-price').value = p.unitPrice;
+            document.getElementById('bale-selling-price').value = p.balePrice;
+            document.getElementById('wholesale-price').value = p.wholesale;
             
-            document.getElementById('product-name').value = p.name || '';
-            document.getElementById('units-per-bale').value = p.unitsPerBale || 20;
-            document.getElementById('bale-quantity').value = p.baleQuantity || 0;
-            document.getElementById('unit-quantity').value = p.unitQuantity || 0;
-            document.getElementById('original-price').value = p.originalPrice || 0;
-            document.getElementById('selling-price').value = p.sellingPrice || 0;
-            document.getElementById('bale-selling-price').value = p.baleSellingPrice || 0;
-            document.getElementById('wholesale-price').value = p.wholesalePrice || 0;
-            
-            calculateTotalUnits();
+            calcTotal();
             products = products.filter(x => x.id !== id);
-            saveProducts();
+            save();
             showPage('form');
-            showToast('Edit and save');
         }
 
-        function exportToJSON() {
-            const data = JSON.stringify(products, null, 2);
-            const blob = new Blob([data], { type: 'application/json' });
+        function exportData() {
+            const data = JSON.stringify(products);
+            const blob = new Blob([data], {type: 'application/json'});
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `inventory-${new Date().toISOString().split('T')[0]}.json`;
+            a.download = `backup-${new Date().toISOString().split('T')[0]}.json`;
             a.click();
-            URL.revokeObjectURL(url);
             showToast('Exported');
         }
 
-        function importFromJSON(input) {
+        function importData(input) {
             const file = input.files[0];
             if (!file) return;
             
             const reader = new FileReader();
             reader.onload = e => {
                 try {
-                    const imported = JSON.parse(e.target.result);
-                    if (Array.isArray(imported)) {
-                        products = imported;
-                        saveProducts();
-                        showToast(`Imported ${imported.length} items`);
+                    const data = JSON.parse(e.target.result);
+                    if (Array.isArray(data)) {
+                        products = data;
+                        save();
+                        showToast(`Imported ${data.length} items`);
                     }
-                } catch (err) {
+                } catch(err) {
                     alert('Invalid file');
                 }
                 input.value = '';
@@ -1262,32 +1128,35 @@
             reader.readAsText(file);
         }
 
-        function escapeHtml(text) {
-            if (!text) return '';
+        function escape(text) {
             const div = document.createElement('div');
             div.textContent = text;
             return div.innerHTML;
         }
 
         function showToast(msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toast-message').textContent = msg;
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2500);
+            document.getElementById('toast-msg').textContent = msg;
+            document.getElementById('toast').classList.add('show');
+            setTimeout(() => document.getElementById('toast').classList.remove('show'), 2000);
         }
 
-        document.getElementById('transaction-modal').addEventListener('click', e => {
-            if (e.target.id === 'transaction-modal') closeModal();
+        // Offline detection
+        window.addEventListener('online', () => {
+            document.getElementById('offline-indicator').classList.remove('show');
+            showToast('Back online');
+        });
+        window.addEventListener('offline', () => {
+            document.getElementById('offline-indicator').classList.add('show');
         });
 
-        // Initialize
-        loadProducts();
-        calculateTotalUnits();
+        // Init
+        load();
+        calcTotal();
+        checkInstallBanner();
         
-        // Render if on display page
         if (document.getElementById('display-page').classList.contains('active')) {
             updateStats();
-            renderTable();
+            render();
         }
     </script>
 </body>
