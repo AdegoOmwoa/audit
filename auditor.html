@@ -16,7 +16,7 @@
             padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         }
 
         :root {
@@ -50,15 +50,14 @@
 
         .header h1 {
             font-size: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
         }
 
         .header p {
             font-size: 0.85rem;
             opacity: 0.9;
-            margin-left: 2rem;
+            margin-top: 0.25rem;
         }
 
         .install-btn {
@@ -71,11 +70,12 @@
             padding: 1rem 1.5rem;
             border-radius: 50px;
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 0.9rem;
             box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);
             z-index: 1000;
             display: none;
             animation: pulse 2s infinite;
+            letter-spacing: 0.02em;
         }
 
         .install-btn.show {
@@ -110,7 +110,9 @@
             color: var(--text-light);
             font-weight: 600;
             border-radius: 8px;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.2s;
         }
 
         .nav button.active {
@@ -141,6 +143,13 @@
             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
+        .card h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--text);
+        }
+
         .form-group {
             margin-bottom: 1rem;
         }
@@ -159,6 +168,7 @@
             border: 2px solid var(--border);
             border-radius: 10px;
             font-size: 16px;
+            font-family: inherit;
         }
 
         .form-group input:focus {
@@ -175,6 +185,12 @@
             font-size: 1rem;
             cursor: pointer;
             margin-top: 0.5rem;
+            font-family: inherit;
+            transition: transform 0.1s;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
         }
 
         .btn-primary {
@@ -199,12 +215,15 @@
             padding: 1rem;
             border-radius: 12px;
             border-left: 4px solid var(--primary);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
         }
 
         .stat h4 {
             font-size: 0.7rem;
             color: var(--text-light);
             text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
         }
 
         .stat div {
@@ -215,6 +234,7 @@
         table {
             width: 100%;
             font-size: 0.9rem;
+            border-collapse: collapse;
         }
 
         th {
@@ -223,7 +243,9 @@
             color: var(--text-light);
             font-size: 0.7rem;
             text-transform: uppercase;
+            letter-spacing: 0.05em;
             border-bottom: 2px solid var(--border);
+            font-weight: 600;
         }
 
         td {
@@ -252,6 +274,8 @@
             border-radius: 6px;
             font-size: 0.8rem;
             font-weight: 600;
+            cursor: pointer;
+            font-family: inherit;
         }
 
         .btn-sell {
@@ -261,6 +285,16 @@
 
         .btn-add {
             background: var(--warning);
+            color: white;
+        }
+
+        .btn-delete {
+            background: var(--danger);
+            color: white;
+        }
+
+        .btn-edit {
+            background: var(--primary);
             color: white;
         }
 
@@ -306,6 +340,7 @@
             border-radius: 10px;
             display: none;
             z-index: 3000;
+            font-weight: 500;
         }
 
         .toast.show {
@@ -316,6 +351,7 @@
             text-align: center;
             padding: 3rem;
             color: var(--text-light);
+            font-size: 0.9rem;
         }
 
         .sell-options {
@@ -331,11 +367,27 @@
             padding: 1rem;
             text-align: center;
             cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .sell-option:hover {
+            border-color: var(--primary);
         }
 
         .sell-option.selected {
             border-color: var(--primary);
             background: #eff6ff;
+        }
+
+        .sell-option-title {
+            font-weight: 700;
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+        }
+
+        .sell-option-sub {
+            font-size: 0.8rem;
+            color: var(--text-light);
         }
 
         .instructions {
@@ -359,12 +411,18 @@
 
         .instructions h3 {
             margin-bottom: 1rem;
+            font-size: 1.1rem;
         }
 
         .instructions ol {
             margin-left: 1.25rem;
             line-height: 2;
             color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .instructions ol li {
+            margin-bottom: 0.5rem;
         }
 
         .instructions button {
@@ -386,25 +444,120 @@
         .overlay.show {
             display: block;
         }
+
+        .info-box {
+            background: #eff6ff;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border-left: 4px solid var(--primary);
+        }
+
+        .info-box strong {
+            color: var(--primary);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--text-light);
+        }
+
+        .stock-low {
+            color: var(--danger);
+            font-weight: 700;
+        }
+
+        .stock-ok {
+            color: var(--success);
+            font-weight: 700;
+        }
+
+        .text-small {
+            font-size: 0.75rem;
+            color: var(--text-light);
+        }
+
+        .text-muted {
+            color: var(--text-light);
+        }
+
+        .flex {
+            display: flex;
+        }
+
+        .gap-2 {
+            gap: 0.5rem;
+        }
+
+        .items-center {
+            align-items: center;
+        }
+
+        .justify-between {
+            justify-content: space-between;
+        }
+
+        .w-full {
+            width: 100%;
+        }
+
+        .mt-2 {
+            margin-top: 0.5rem;
+        }
+
+        .mb-2 {
+            margin-bottom: 0.5rem;
+        }
+
+        .font-bold {
+            font-weight: 700;
+        }
+
+        .text-lg {
+            font-size: 1.125rem;
+        }
+
+        .text-sm {
+            font-size: 0.875rem;
+        }
+
+        .text-xs {
+            font-size: 0.75rem;
+        }
+
+        .uppercase {
+            text-transform: uppercase;
+        }
+
+        .tracking-wide {
+            letter-spacing: 0.05em;
+        }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <h1>💰 PriceTrack Pro</h1>
-        <p>Offline Inventory</p>
+        <div style="padding: 0 0.5rem;">
+            <h1>PriceTrack Pro</h1>
+            <p>Offline Inventory Management</p>
+        </div>
     </div>
 
-    <!-- Install Button -->
     <button class="install-btn" id="installBtn" onclick="tryInstall()">
-        📲 Install App
+        Install App
     </button>
 
     <div class="overlay" id="overlay" onclick="hideInstructions()"></div>
     <div class="instructions" id="instructions">
-        <h3>📱 Add to Home Screen</h3>
+        <h3>Add to Home Screen</h3>
         <ol id="steps">
-            <li>Tap the <strong>menu button</strong> (⋮) in Chrome</li>
+            <li>Tap the <strong>menu button</strong> (three dots) in Chrome</li>
             <li>Select <strong>"Add to Home screen"</strong></li>
             <li>Tap <strong>"Add"</strong></li>
         </ol>
@@ -412,58 +565,66 @@
     </div>
 
     <div class="nav">
-        <button class="active" onclick="show('add')">➕ Add</button>
-        <button onclick="show('view')">📦 View</button>
+        <button class="active" onclick="show('add')">Add Product</button>
+        <button onclick="show('view')">View Stock</button>
     </div>
 
     <!-- Add Page -->
     <div id="add" class="page active">
         <div class="card">
-            <h2 style="margin-bottom: 1rem;">New Product</h2>
+            <h2>New Product</h2>
             <form id="form" onsubmit="saveProduct(event)">
-                <div class="form-group">
-                    <label>Product Name</label>
-                    <input type="text" id="name" required placeholder="e.g. Rice">
-                </div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>Product Name</label>
+                        <input type="text" id="name" required placeholder="Enter product name">
+                    </div>
                     <div class="form-group">
-                        <label>Units/Bale</label>
+                        <label>Units per Bale</label>
                         <input type="number" id="upb" required value="20" min="1">
                     </div>
                     <div class="form-group">
-                        <label>Bales</label>
+                        <label>Number of Bales</label>
                         <input type="number" id="bales" required value="0" min="0" oninput="calc()">
                     </div>
-                </div>
-                <div class="form-group">
-                    <label>Loose Units</label>
-                    <input type="number" id="units" required value="0" min="0" oninput="calc()">
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div class="form-group">
-                        <label>Cost/Unit ($)</label>
-                        <input type="number" id="cost" required value="0" step="0.01">
+                    <div class="form-group" style="grid-column: 1 / -1;">
+                        <label>Loose Units</label>
+                        <input type="number" id="units" required value="0" min="0" oninput="calc()">
                     </div>
                     <div class="form-group">
-                        <label>Sell/Unit ($)</label>
-                        <input type="number" id="price" required value="0" step="0.01">
-                    </div>
-                </div>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div class="form-group">
-                        <label>Sell/Bale ($)</label>
-                        <input type="number" id="balePrice" required value="0" step="0.01">
+                        <label>Cost per Unit ($)</label>
+                        <input type="number" id="cost" required value="0" min="0" step="0.01">
                     </div>
                     <div class="form-group">
-                        <label>Wholesale ($)</label>
-                        <input type="number" id="ws" required value="0" step="0.01">
+                        <label>Selling Price per Unit ($)</label>
+                        <input type="number" id="price" required value="0" min="0" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Selling Price per Bale ($)</label>
+                        <input type="number" id="balePrice" required value="0" min="0" step="0.01">
+                    </div>
+                    <div class="form-group">
+                        <label>Wholesale Price ($)</label>
+                        <input type="number" id="ws" required value="0" min="0" step="0.01">
                     </div>
                 </div>
-                <div style="background: #eff6ff; padding: 1rem; border-radius: 8px; margin: 1rem 0;">
-                    <strong>Total: </strong><span id="total" style="font-size: 1.2rem; color: var(--primary);">0 units</span>
+                
+                <div class="info-box">
+                    <span>Total Stock: </span>
+                    <span id="total" class="font-bold text-lg">0 units</span>
                 </div>
-                <button type="submit" class="btn btn-primary">💾 Save Product</button>
+
+                <div style="display: flex; gap: 0.5rem;">
+                    <button type="submit" class="btn btn-primary" style="flex: 2;">Save Product</button>
+                    <button type="button" class="btn btn-secondary" onclick="clearForm()" style="flex: 1;">Clear</button>
+                </div>
             </form>
+        </div>
+
+        <div class="card" style="background: #f0fdf4;">
+            <p class="text-sm text-muted">
+                <strong>Tip:</strong> This app works fully offline. All data is saved locally on your device.
+            </p>
         </div>
     </div>
 
@@ -475,40 +636,45 @@
                 <div id="st-products">0</div>
             </div>
             <div class="stat" style="border-color: var(--success);">
-                <h4>Bales</h4>
+                <h4>Total Bales</h4>
                 <div id="st-bales">0</div>
             </div>
             <div class="stat" style="border-color: var(--warning);">
-                <h4>Units</h4>
+                <h4>Loose Units</h4>
                 <div id="st-units">0</div>
             </div>
             <div class="stat" style="border-color: var(--primary);">
-                <h4>Value</h4>
+                <h4>Inventory Value</h4>
                 <div id="st-value">$0</div>
             </div>
         </div>
 
         <div class="card">
-            <input type="text" id="search" placeholder="🔍 Search..." onkeyup="search()" style="width: 100%; padding: 0.75rem; border: 2px solid var(--border); border-radius: 10px; margin-bottom: 1rem; font-size: 16px;">
+            <div class="form-group">
+                <input type="text" id="search" placeholder="Search products..." onkeyup="search()" style="margin-bottom: 0;">
+            </div>
             
             <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-                <button class="btn btn-secondary" onclick="exportData()" style="flex: 1; margin: 0;">📤 Export</button>
-                <button class="btn btn-secondary" onclick="document.getElementById('imp').click()" style="flex: 1; margin: 0;">📥 Import</button>
+                <button class="btn btn-secondary" onclick="exportData()" style="margin: 0; flex: 1;">Export Data</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('imp').click()" style="margin: 0; flex: 1;">Import Data</button>
                 <input type="file" id="imp" accept=".json" style="display: none;" onchange="importData(this)">
             </div>
 
-            <table>
-                <thead>
-                    <tr>
-                        <th>Item</th>
-                        <th>Stock</th>
-                        <th>Action</th>
-                    </tr>
-                </thead>
-                <tbody id="tbody"></tbody>
-            </table>
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Product</th>
+                            <th>Stock Level</th>
+                            <th>Prices</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tbody"></tbody>
+                </table>
+            </div>
             <div id="empty" class="empty" style="display: none;">
-                No products yet
+                No products added yet. Go to "Add Product" to create your first item.
             </div>
         </div>
     </div>
@@ -516,36 +682,36 @@
     <!-- Modal -->
     <div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
         <div class="modal-content">
-            <h3 id="mtitle">Sell</h3>
-            <p id="mproduct" style="font-weight: 600;"></p>
-            <p id="mstock" style="color: var(--text-light); font-size: 0.85rem;"></p>
+            <h3 id="mtitle" style="margin-bottom: 0.5rem;">Transaction</h3>
+            <p id="mproduct" style="font-weight: 700; margin-bottom: 0.25rem;"></p>
+            <p id="mstock" class="text-muted text-sm" style="margin-bottom: 1rem;"></p>
             
             <div class="sell-options" id="sopts">
                 <div class="sell-option selected" onclick="setType('unit')">
-                    <div style="font-size: 1.5rem;">📦</div>
-                    <div>Unit</div>
+                    <div class="sell-option-title">Sell by Unit</div>
+                    <div class="sell-option-sub">Individual items</div>
                 </div>
                 <div class="sell-option" onclick="setType('bale')">
-                    <div style="font-size: 1.5rem;">🎁</div>
-                    <div>Bale</div>
+                    <div class="sell-option-title">Sell by Bale</div>
+                    <div class="sell-option-sub">Complete bales</div>
                 </div>
             </div>
 
             <div class="form-group">
                 <label>Quantity</label>
-                <input type="number" id="mqty" value="1" min="1" style="text-align: center; font-size: 1.25rem;">
+                <input type="number" id="mqty" value="1" min="1" style="text-align: center; font-size: 1.25rem; font-weight: 700;">
             </div>
 
-            <p id="merror" style="color: var(--danger); display: none;"></p>
+            <p id="merror" style="color: var(--danger); display: none; margin-bottom: 1rem; font-size: 0.9rem;"></p>
 
-            <div style="display: flex; gap: 0.5rem; margin-top: 1rem;">
+            <div style="display: flex; gap: 0.5rem;">
                 <button class="btn btn-secondary" onclick="closeModal()" style="flex: 1; margin: 0;">Cancel</button>
                 <button class="btn btn-primary" onclick="doTx()" style="flex: 1; margin: 0;">Confirm</button>
             </div>
         </div>
     </div>
 
-    <div class="toast" id="toast">✓ Done</div>
+    <div class="toast" id="toast">Done</div>
 
     <script>
         // ==================== DATA ====================
@@ -568,31 +734,26 @@
 
         // ==================== INSTALL ====================
         
-        // Capture install prompt
         window.addEventListener('beforeinstallprompt', (e) => {
-            console.log('beforeinstallprompt fired');
             e.preventDefault();
             deferredPrompt = e;
-            showInstallButton();
+            showInstallBtn();
         });
 
-        // Also try to show button after user interaction
-        let interactionCount = 0;
+        let clickCount = 0;
         document.addEventListener('click', () => {
-            interactionCount++;
-            // Show after 3 clicks if we have data and not standalone
-            if (interactionCount === 3 && products.length > 0 && !isStandalone()) {
-                showInstallButton();
+            clickCount++;
+            if (clickCount === 3 && products.length > 0 && !isStandalone()) {
+                showInstallBtn();
             }
         });
 
         function isStandalone() {
             return window.matchMedia('(display-mode: standalone)').matches || 
-                   window.navigator.standalone ||
-                   location.href.includes('localhost');
+                   window.navigator.standalone;
         }
 
-        function showInstallButton() {
+        function showInstallBtn() {
             if (isStandalone()) return;
             document.getElementById('installBtn').classList.add('show');
         }
@@ -602,7 +763,7 @@
                 deferredPrompt.prompt();
                 deferredPrompt.userChoice.then((choice) => {
                     if (choice.outcome === 'accepted') {
-                        showToast('App installed!');
+                        toast('App installed successfully');
                         document.getElementById('installBtn').style.display = 'none';
                     }
                     deferredPrompt = null;
@@ -615,25 +776,25 @@
         function showInstructions() {
             const ua = navigator.userAgent.toLowerCase();
             let steps = `
-                <li>Tap the <strong>menu (⋮)</strong> in Chrome</li>
+                <li>Tap the <strong>menu button</strong> (three dots) in Chrome</li>
                 <li>Select <strong>"Add to Home screen"</strong></li>
                 <li>Tap <strong>"Add"</strong></li>
             `;
             
             if (ua.includes('samsung')) {
                 steps = `
-                    <li>Tap <strong>menu ⋮</strong></li>
+                    <li>Tap <strong>menu</strong> (three dots)</li>
                     <li>Select <strong>"Add page to"</strong></li>
                     <li>Choose <strong>"Home screen"</strong></li>
                 `;
             } else if (ua.includes('firefox')) {
                 steps = `
-                    <li>Tap <strong>menu ⋮</strong></li>
+                    <li>Tap <strong>menu</strong> (three dots)</li>
                     <li>Select <strong>"Add to Home screen"</strong></li>
                 `;
             } else if (/iphone|ipad|ipod/.test(ua)) {
                 steps = `
-                    <li>Tap <strong>Share button ⬆️</strong></li>
+                    <li>Tap <strong>Share button</strong> at bottom</li>
                     <li>Scroll down and tap <strong>"Add to Home Screen"</strong></li>
                     <li>Tap <strong>"Add"</strong></li>
                 `;
@@ -649,19 +810,18 @@
             document.getElementById('overlay').classList.remove('show');
         }
 
-        // Always check and show button after 10 seconds if conditions met
         setTimeout(() => {
             if (!isStandalone() && products.length > 0) {
-                showInstallButton();
+                showInstallBtn();
             }
-        }, 10000);
+        }, 8000);
 
         // ==================== APP ====================
         function calc() {
             const upb = parseInt(document.getElementById('upb').value) || 1;
             const b = parseInt(document.getElementById('bales').value) || 0;
             const u = parseInt(document.getElementById('units').value) || 0;
-            document.getElementById('total').textContent = `${(b*upb)+u} units (${b}b+${u}u)`;
+            document.getElementById('total').textContent = `${(b * upb) + u} units (${b} bales + ${u} units)`;
         }
 
         function saveProduct(e) {
@@ -679,7 +839,11 @@
             };
             products.push(p);
             save();
-            showToast(`Saved: ${p.name}`);
+            toast(`Saved: ${p.name}`);
+            clearForm();
+        }
+
+        function clearForm() {
             document.getElementById('form').reset();
             document.getElementById('upb').value = 20;
             calc();
@@ -688,7 +852,7 @@
         function show(page) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav button').forEach((b, i) => {
-                b.classList.toggle('active', (page==='add'&&i===0)||(page==='view'&&i===1));
+                b.classList.toggle('active', (page === 'add' && i === 0) || (page === 'view' && i === 1));
             });
             document.getElementById(page).classList.add('active');
             if (page === 'view') {
@@ -698,10 +862,10 @@
         }
 
         function formatStock(p) {
-            if (p.bales > 0 && p.units > 0) return `${p.bales}b ${p.units}u`;
+            if (p.bales > 0 && p.units > 0) return `${p.bales} bales ${p.units} units`;
             if (p.bales > 0) return `${p.bales} bales`;
             if (p.units > 0) return `${p.units} units`;
-            return 'Out';
+            return 'Out of stock';
         }
 
         function total(p) {
@@ -717,35 +881,45 @@
                 document.getElementById('empty').style.display = 'block';
                 return;
             }
+            
             document.getElementById('empty').style.display = 'none';
             
-            tb.innerHTML = data.map(p => `
-                <tr>
-                    <td>
-                        <div style="font-weight: 600;">${esc(p.name)}</div>
-                        <div style="font-size: 0.75rem; color: var(--text-light);">$${p.price.toFixed(2)}/unit</div>
-                    </td>
-                    <td>
-                        <div style="font-weight: 700;">${formatStock(p)}</div>
-                        <div style="font-size: 0.75rem; color: var(--text-light);">${total(p)} total</div>
-                    </td>
-                    <td>
-                        <div class="actions">
-                            <button class="btn-sell" onclick="sell(${p.id})" ${total(p)===0?'disabled style="opacity:0.4"':''}>Sell</button>
-                            <button class="btn-add" onclick="restock(${p.id})">+</button>
-                            <button onclick="del(${p.id})" style="background: var(--danger); color: white;">🗑</button>
-                        </div>
-                    </td>
-                </tr>
-            `).join('');
+            tb.innerHTML = data.map(p => {
+                const t = total(p);
+                const stockClass = t === 0 ? 'stock-low' : 'stock-ok';
+                
+                return `
+                    <tr>
+                        <td>
+                            <div class="font-bold">${esc(p.name)}</div>
+                            <div class="text-small text-muted">${p.upb} units per bale</div>
+                        </td>
+                        <td>
+                            <div class="${stockClass}">${formatStock(p)}</div>
+                            <div class="text-small text-muted">${t} total units</div>
+                        </td>
+                        <td>
+                            <div class="tag">$${p.price.toFixed(2)} / unit</div>
+                            <div class="text-small text-muted mt-2">Bale: $${p.balePrice.toFixed(2)}</div>
+                        </td>
+                        <td>
+                            <div class="actions">
+                                <button class="btn-sell" onclick="sell(${p.id})" ${t === 0 ? 'disabled style="opacity:0.4"' : ''}>Sell</button>
+                                <button class="btn-add" onclick="restock(${p.id})">Add</button>
+                                <button class="btn-delete" onclick="del(${p.id})">Del</button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            }).join('');
         }
 
         function sell(id) {
             const p = products.find(x => x.id === id);
             current = { id, type: 'sell', sellType: 'unit' };
-            document.getElementById('mtitle').textContent = 'Sell';
+            document.getElementById('mtitle').textContent = 'Sell Product';
             document.getElementById('mproduct').textContent = p.name;
-            document.getElementById('mstock').textContent = `Stock: ${formatStock(p)}`;
+            document.getElementById('mstock').textContent = `Current stock: ${formatStock(p)}`;
             document.getElementById('sopts').style.display = 'grid';
             document.getElementById('mqty').value = 1;
             document.getElementById('merror').style.display = 'none';
@@ -782,7 +956,7 @@
             const p = products.find(x => x.id === current.id);
             
             if (!qty || qty < 1) {
-                err.textContent = 'Enter quantity';
+                err.textContent = 'Please enter a valid quantity';
                 err.style.display = 'block';
                 return;
             }
@@ -791,7 +965,7 @@
                 if (current.sellType === 'unit') {
                     const avail = total(p);
                     if (qty > avail) {
-                        err.textContent = `Only ${avail} available`;
+                        err.textContent = `Only ${avail} units available`;
                         err.style.display = 'block';
                         return;
                     }
@@ -813,19 +987,19 @@
                             }
                         }
                     }
-                    showToast(`Sold ${qty} units`);
+                    toast(`Sold ${qty} units`);
                 } else {
                     if (qty > p.bales) {
-                        err.textContent = `Only ${p.bales} bales`;
+                        err.textContent = `Only ${p.bales} bales available`;
                         err.style.display = 'block';
                         return;
                     }
                     p.bales -= qty;
-                    showToast(`Sold ${qty} bales`);
+                    toast(`Sold ${qty} bales`);
                 }
             } else {
                 p.bales += qty;
-                showToast(`Added ${qty} bales`);
+                toast(`Added ${qty} bales`);
             }
             
             save();
@@ -834,10 +1008,10 @@
 
         function updateStats() {
             document.getElementById('st-products').textContent = products.length;
-            document.getElementById('st-bales').textContent = products.reduce((a,p)=>a+p.bales,0);
-            document.getElementById('st-units').textContent = products.reduce((a,p)=>a+p.units,0);
-            const val = products.reduce((a,p)=>a+(p.cost*total(p)),0);
-            document.getElementById('st-value').textContent = '$'+val.toLocaleString();
+            document.getElementById('st-bales').textContent = products.reduce((a, p) => a + p.bales, 0);
+            document.getElementById('st-units').textContent = products.reduce((a, p) => a + p.units, 0);
+            const val = products.reduce((a, p) => a + (p.cost * total(p)), 0);
+            document.getElementById('st-value').textContent = '$' + val.toLocaleString();
         }
 
         function search() {
@@ -847,22 +1021,23 @@
         }
 
         function del(id) {
-            if (confirm('Delete?')) {
+            if (confirm('Delete this product?')) {
                 products = products.filter(p => p.id !== id);
                 save();
-                showToast('Deleted');
+                toast('Product deleted');
             }
         }
 
         function exportData() {
-            const data = JSON.stringify(products);
-            const blob = new Blob([data], {type:'application/json'});
+            const data = JSON.stringify(products, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `ptp-${new Date().toISOString().split('T')[0]}.json`;
+            a.download = `pricetrack-backup-${new Date().toISOString().split('T')[0]}.json`;
             a.click();
-            showToast('Exported');
+            URL.revokeObjectURL(url);
+            toast('Data exported');
         }
 
         function importData(inp) {
@@ -875,9 +1050,11 @@
                     if (Array.isArray(d)) {
                         products = d;
                         save();
-                        showToast(`Imported ${d.length}`);
+                        toast(`Imported ${d.length} products`);
                     }
-                } catch(err) { alert('Invalid'); }
+                } catch (err) { 
+                    alert('Invalid file format'); 
+                }
                 inp.value = '';
             };
             r.readAsText(f);
@@ -889,20 +1066,18 @@
             return d.innerHTML;
         }
 
-        function showToast(m) {
+        function toast(m) {
             const t = document.getElementById('toast');
-            t.textContent = '✓ ' + m;
+            t.textContent = m;
             t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 2000);
+            setTimeout(() => t.classList.remove('show'), 2500);
         }
 
-        // Init
         load();
         calc();
         
-        // If we have products, try to show install button after delay
         if (products.length > 0) {
-            setTimeout(showInstallButton, 5000);
+            setTimeout(showInstallBtn, 6000);
         }
     </script>
 </body>
