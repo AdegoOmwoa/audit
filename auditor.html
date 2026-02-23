@@ -8,556 +8,125 @@
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    
+
+    <!-- PWA manifest -->
+    <link rel="manifest" href="data:application/manifest+json,{
+        %22name%22:%22PriceTrack%20Pro%22,
+        %22short_name%22:%22PriceTrack%22,
+        %22description%22:%22Offline%20inventory%20and%20price%20management%22,
+        %22start_url%22:%22.%22,
+        %22display%22:%22standalone%22,
+        %22background_color%22:%22%23f8fafc%22,
+        %22theme_color%22:%22%232563eb%22,
+        %22orientation%22:%22portrait-primary%22,
+        %22icons%22:[
+            {
+                %22src%22:%22https://via.placeholder.com/192?text=PT%22,
+                %22sizes%22:%22192x192%22,
+                %22type%22:%22image/png%22,
+                %22purpose%22:%22any%20maskable%22
+            },
+            {
+                %22src%22:%22https://via.placeholder.com/512?text=PT%22,
+                %22sizes%22:%22512x512%22,
+                %22type%22:%22image/png%22,
+                %22purpose%22:%22any%20maskable%22
+            }
+        ]
+    }">
+
     <title>PriceTrack Pro</title>
+
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-        }
-
+        * { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; font-family:system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'Helvetica Neue',Arial,sans-serif; }
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --success: #059669;
-            --danger: #dc2626;
-            --warning: #d97706;
-            --bg: #f8fafc;
-            --card: #ffffff;
-            --text: #1e293b;
-            --text-light: #64748b;
-            --border: #e2e8f0;
+            --primary:#2563eb; --primary-dark:#1d4ed8; --success:#059669; --danger:#dc2626; --warning:#d97706;
+            --bg:#f8fafc; --card:#ffffff; --text:#1e293b; --text-light:#64748b; --border:#e2e8f0;
         }
-
-        body {
-            background: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            padding-bottom: 80px;
-        }
-
-        .header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
-            color: white;
-            padding: 1.25rem;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .header h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-        }
-
-        .header p {
-            font-size: 0.85rem;
-            opacity: 0.9;
-            margin-top: 0.25rem;
-        }
-
+        body { background:var(--bg); color:var(--text); line-height:1.6; padding-bottom:80px; }
+        .header { background:linear-gradient(135deg,var(--primary)0%,var(--primary-dark)100%); color:white; padding:1.25rem; position:sticky; top:0; z-index:100; }
+        .header h1 { font-size:1.5rem; font-weight:700; letter-spacing:-0.02em; }
+        .header p { font-size:0.85rem; opacity:0.9; margin-top:0.25rem; }
         .install-btn {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--success);
-            color: white;
-            border: none;
-            padding: 1rem 1.5rem;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            box-shadow: 0 4px 12px rgba(5, 150, 105, 0.4);
-            z-index: 1000;
-            display: none;
-            animation: pulse 2s infinite;
-            letter-spacing: 0.02em;
-        }
-
-        .install-btn.show {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        @keyframes pulse {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
-        .nav {
-            display: flex;
-            gap: 0.5rem;
-            padding: 1rem;
-            background: var(--card);
-            margin: 1rem;
-            border-radius: 12px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            position: sticky;
-            top: 70px;
-            z-index: 99;
-        }
-
-        .nav button {
-            flex: 1;
-            padding: 0.75rem;
-            border: none;
-            background: transparent;
-            color: var(--text-light);
-            font-weight: 600;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .nav button.active {
-            background: var(--primary);
-            color: white;
-        }
-
-        .page {
-            display: none;
-            padding: 0 1rem;
-        }
-
-        .page.active {
-            display: block;
-            animation: fadeIn 0.3s;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
-        .card {
-            background: var(--card);
-            border-radius: 16px;
-            padding: 1.25rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        .card h2 {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: var(--text);
-        }
-
-        .form-group {
-            margin-bottom: 1rem;
-        }
-
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            font-size: 0.85rem;
-            margin-bottom: 0.5rem;
-            color: var(--text);
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 0.875rem;
-            border: 2px solid var(--border);
-            border-radius: 10px;
-            font-size: 16px;
-            font-family: inherit;
-        }
-
-        .form-group input:focus {
-            outline: none;
-            border-color: var(--primary);
-        }
-
-        .btn {
-            width: 100%;
-            padding: 1rem;
-            border: none;
-            border-radius: 10px;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            margin-top: 0.5rem;
-            font-family: inherit;
-            transition: transform 0.1s;
-        }
-
-        .btn:active {
-            transform: scale(0.98);
-        }
-
-        .btn-primary {
-            background: var(--primary);
-            color: white;
-        }
-
-        .btn-secondary {
-            background: var(--text-light);
-            color: white;
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 0.75rem;
-            margin-bottom: 1rem;
-        }
-
-        .stat {
-            background: var(--card);
-            padding: 1rem;
-            border-radius: 12px;
-            border-left: 4px solid var(--primary);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-        }
-
-        .stat h4 {
-            font-size: 0.7rem;
-            color: var(--text-light);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            margin-bottom: 0.25rem;
-        }
-
-        .stat div {
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-
-        table {
-            width: 100%;
-            font-size: 0.9rem;
-            border-collapse: collapse;
-        }
-
-        th {
-            text-align: left;
-            padding: 0.75rem;
-            color: var(--text-light);
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-            border-bottom: 2px solid var(--border);
-            font-weight: 600;
-        }
-
-        td {
-            padding: 0.75rem;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .tag {
-            display: inline-block;
-            padding: 0.25rem 0.5rem;
-            background: #d1fae5;
-            color: #065f46;
-            border-radius: 12px;
-            font-weight: 600;
-            font-size: 0.8rem;
-        }
-
-        .actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .actions button {
-            padding: 0.5rem 0.75rem;
-            border: none;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            cursor: pointer;
-            font-family: inherit;
-        }
-
-        .btn-sell {
-            background: var(--success);
-            color: white;
-        }
-
-        .btn-add {
-            background: var(--warning);
-            color: white;
-        }
-
-        .btn-delete {
-            background: var(--danger);
-            color: white;
-        }
-
-        .btn-edit {
-            background: var(--primary);
-            color: white;
-        }
-
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 2000;
-            justify-content: center;
-            align-items: flex-end;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            background: white;
-            width: 100%;
-            max-width: 400px;
-            border-radius: 20px 20px 0 0;
-            padding: 1.5rem;
-            animation: slideUp 0.3s;
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
-        }
-
-        .toast {
-            position: fixed;
-            bottom: 100px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #1e293b;
-            color: white;
-            padding: 1rem 1.5rem;
-            border-radius: 10px;
-            display: none;
-            z-index: 3000;
-            font-weight: 500;
-        }
-
-        .toast.show {
-            display: block;
-        }
-
-        .empty {
-            text-align: center;
-            padding: 3rem;
-            color: var(--text-light);
-            font-size: 0.9rem;
-        }
-
-        .sell-options {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1rem;
-            margin: 1rem 0;
-        }
-
-        .sell-option {
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            padding: 1rem;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-
-        .sell-option:hover {
-            border-color: var(--primary);
-        }
-
-        .sell-option.selected {
-            border-color: var(--primary);
-            background: #eff6ff;
-        }
-
-        .sell-option-title {
-            font-weight: 700;
-            font-size: 1rem;
-            margin-bottom: 0.25rem;
-        }
-
-        .sell-option-sub {
-            font-size: 0.8rem;
-            color: var(--text-light);
-        }
-
-        .instructions {
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: white;
-            padding: 1.5rem;
-            border-radius: 16px;
-            box-shadow: 0 20px 25px rgba(0,0,0,0.2);
-            z-index: 3000;
-            display: none;
-            width: 90%;
-            max-width: 320px;
-        }
-
-        .instructions.show {
-            display: block;
-        }
-
-        .instructions h3 {
-            margin-bottom: 1rem;
-            font-size: 1.1rem;
-        }
-
-        .instructions ol {
-            margin-left: 1.25rem;
-            line-height: 2;
-            color: var(--text-light);
-            font-size: 0.9rem;
-        }
-
-        .instructions ol li {
-            margin-bottom: 0.5rem;
-        }
-
-        .instructions button {
-            margin-top: 1rem;
-            width: 100%;
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0,0,0,0.5);
-            z-index: 2999;
-            display: none;
-        }
-
-        .overlay.show {
-            display: block;
-        }
-
-        .info-box {
-            background: #eff6ff;
-            padding: 1rem;
-            border-radius: 8px;
-            margin: 1rem 0;
-            border-left: 4px solid var(--primary);
-        }
-
-        .info-box strong {
-            color: var(--primary);
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--text-light);
-        }
-
-        .stock-low {
-            color: var(--danger);
-            font-weight: 700;
-        }
-
-        .stock-ok {
-            color: var(--success);
-            font-weight: 700;
-        }
-
-        .text-small {
-            font-size: 0.75rem;
-            color: var(--text-light);
-        }
-
-        .text-muted {
-            color: var(--text-light);
-        }
-
-        .flex {
-            display: flex;
-        }
-
-        .gap-2 {
-            gap: 0.5rem;
-        }
-
-        .items-center {
-            align-items: center;
-        }
-
-        .justify-between {
-            justify-content: space-between;
-        }
-
-        .w-full {
-            width: 100%;
-        }
-
-        .mt-2 {
-            margin-top: 0.5rem;
-        }
-
-        .mb-2 {
-            margin-bottom: 0.5rem;
-        }
-
-        .font-bold {
-            font-weight: 700;
-        }
-
-        .text-lg {
-            font-size: 1.125rem;
-        }
-
-        .text-sm {
-            font-size: 0.875rem;
-        }
-
-        .text-xs {
-            font-size: 0.75rem;
-        }
-
-        .uppercase {
-            text-transform: uppercase;
-        }
-
-        .tracking-wide {
-            letter-spacing: 0.05em;
-        }
+            position:fixed; bottom:20px; right:20px; background:var(--success); color:white; border:none;
+            padding:1rem 1.5rem; border-radius:50px; font-weight:700; font-size:0.9rem;
+            box-shadow:0 4px 12px rgba(5,150,105,0.4); z-index:1000; display:none;
+            animation:pulse 2s infinite; letter-spacing:0.02em;
+        }
+        .install-btn.show { display:flex; align-items:center; gap:0.5rem; }
+        @keyframes pulse { 0%,100% {transform:scale(1);} 50% {transform:scale(1.05);} }
+        .nav { display:flex; gap:0.5rem; padding:1rem; background:var(--card); margin:1rem; border-radius:12px; box-shadow:0 2px 4px rgba(0,0,0,0.1); position:sticky; top:70px; z-index:99; }
+        .nav button { flex:1; padding:0.75rem; border:none; background:transparent; color:var(--text-light); font-weight:600; border-radius:8px; font-size:0.9rem; cursor:pointer; transition:all 0.2s; }
+        .nav button.active { background:var(--primary); color:white; }
+        .page { display:none; padding:0 1rem; }
+        .page.active { display:block; animation:fadeIn 0.3s; }
+        @keyframes fadeIn { from {opacity:0;} to {opacity:1;} }
+        .card { background:var(--card); border-radius:16px; padding:1.25rem; margin-bottom:1rem; box-shadow:0 2px 4px rgba(0,0,0,0.05); }
+        .card h2 { font-size:1.1rem; font-weight:700; margin-bottom:1rem; color:var(--text); }
+        .form-group { margin-bottom:1rem; }
+        .form-group label { display:block; font-weight:600; font-size:0.85rem; margin-bottom:0.5rem; color:var(--text); }
+        .form-group input { width:100%; padding:0.875rem; border:2px solid var(--border); border-radius:10px; font-size:16px; font-family:inherit; }
+        .form-group input:focus { outline:none; border-color:var(--primary); }
+        .btn { width:100%; padding:1rem; border:none; border-radius:10px; font-weight:600; font-size:1rem; cursor:pointer; margin-top:0.5rem; font-family:inherit; transition:transform 0.1s; }
+        .btn:active { transform:scale(0.98); }
+        .btn-primary { background:var(--primary); color:white; }
+        .btn-secondary { background:var(--text-light); color:white; }
+        .stats { display:grid; grid-template-columns:repeat(2,1fr); gap:0.75rem; margin-bottom:1rem; }
+        .stat { background:var(--card); padding:1rem; border-radius:12px; border-left:4px solid var(--primary); box-shadow:0 2px 4px rgba(0,0,0,0.05); }
+        .stat h4 { font-size:0.7rem; color:var(--text-light); text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.25rem; }
+        .stat div { font-size:1.5rem; font-weight:700; }
+        table { width:100%; font-size:0.9rem; border-collapse:collapse; }
+        th { text-align:left; padding:0.75rem; color:var(--text-light); font-size:0.7rem; text-transform:uppercase; letter-spacing:0.05em; border-bottom:2px solid var(--border); font-weight:600; }
+        td { padding:0.75rem; border-bottom:1px solid var(--border); }
+        .tag { display:inline-block; padding:0.25rem 0.5rem; background:#d1fae5; color:#065f46; border-radius:12px; font-weight:600; font-size:0.8rem; }
+        .actions { display:flex; gap:0.5rem; }
+        .actions button { padding:0.5rem 0.75rem; border:none; border-radius:6px; font-size:0.8rem; font-weight:600; cursor:pointer; font-family:inherit; }
+        .btn-sell { background:var(--success); color:white; }
+        .btn-add { background:var(--warning); color:white; }
+        .btn-delete { background:var(--danger); color:white; }
+        .modal { display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:2000; justify-content:center; align-items:flex-end; }
+        .modal.active { display:flex; }
+        .modal-content { background:white; width:100%; max-width:400px; border-radius:20px 20px 0 0; padding:1.5rem; animation:slideUp 0.3s; }
+        @keyframes slideUp { from {transform:translateY(100%);} to {transform:translateY(0);} }
+        .toast { position:fixed; bottom:100px; left:50%; transform:translateX(-50%); background:#1e293b; color:white; padding:1rem 1.5rem; border-radius:10px; display:none; z-index:3000; font-weight:500; }
+        .toast.show { display:block; }
+        .empty { text-align:center; padding:3rem; color:var(--text-light); font-size:0.9rem; }
+        .sell-options { display:grid; grid-template-columns:1fr 1fr; gap:1rem; margin:1rem 0; }
+        .sell-option { border:2px solid var(--border); border-radius:12px; padding:1rem; text-align:center; cursor:pointer; transition:all 0.2s; }
+        .sell-option:hover { border-color:var(--primary); }
+        .sell-option.selected { border-color:var(--primary); background:#eff6ff; }
+        .sell-option-title { font-weight:700; font-size:1rem; margin-bottom:0.25rem; }
+        .sell-option-sub { font-size:0.8rem; color:var(--text-light); }
+        .overlay { position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.5); z-index:2999; display:none; }
+        .overlay.show { display:block; }
+        .instructions { position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); background:white; padding:1.5rem; border-radius:16px; box-shadow:0 20px 25px rgba(0,0,0,0.2); z-index:3000; display:none; width:90%; max-width:320px; }
+        .instructions.show { display:block; }
+        .instructions h3 { margin-bottom:1rem; font-size:1.1rem; }
+        .instructions ol { margin-left:1.25rem; line-height:2; color:var(--text-light); font-size:0.9rem; }
+        .info-box { background:#eff6ff; padding:1rem; border-radius:8px; margin:1rem 0; border-left:4px solid var(--primary); }
+        .stock-low { color:var(--danger); font-weight:700; }
+        .stock-ok { color:var(--success); font-weight:700; }
+        .text-small { font-size:0.75rem; }
+        .text-muted { color:var(--text-light); }
+        .mt-2 { margin-top:0.5rem; }
     </style>
 </head>
 <body>
 
     <div class="header">
-        <div style="padding: 0 0.5rem;">
+        <div style="padding:0 0.5rem;">
             <h1>PriceTrack Pro</h1>
             <p>Offline Inventory Management</p>
         </div>
     </div>
 
-    <button class="install-btn" id="installBtn" onclick="tryInstall()">
-        Install App
-    </button>
+    <button class="install-btn" id="installBtn">Install App</button>
 
     <div class="overlay" id="overlay" onclick="hideInstructions()"></div>
     <div class="instructions" id="instructions">
         <h3>Add to Home Screen</h3>
         <ol id="steps">
-            <li>Tap the <strong>menu button</strong> (three dots) in Chrome</li>
+            <li>Tap the <strong>menu</strong> (three dots) in browser</li>
             <li>Select <strong>"Add to Home screen"</strong></li>
             <li>Tap <strong>"Add"</strong></li>
         </ol>
@@ -569,13 +138,12 @@
         <button onclick="show('view')">View Stock</button>
     </div>
 
-    <!-- Add Page -->
     <div id="add" class="page active">
         <div class="card">
             <h2>New Product</h2>
             <form id="form" onsubmit="saveProduct(event)">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                    <div class="form-group" style="grid-column: 1 / -1;">
+                <div style="display:grid; grid-template-columns:1fr 1fr; gap:1rem;">
+                    <div class="form-group" style="grid-column:1/-1;">
                         <label>Product Name</label>
                         <input type="text" id="name" required placeholder="Enter product name">
                     </div>
@@ -587,7 +155,7 @@
                         <label>Number of Bales</label>
                         <input type="number" id="bales" required value="0" min="0" oninput="calc()">
                     </div>
-                    <div class="form-group" style="grid-column: 1 / -1;">
+                    <div class="form-group" style="grid-column:1/-1;">
                         <label>Loose Units</label>
                         <input type="number" id="units" required value="0" min="0" oninput="calc()">
                     </div>
@@ -608,83 +176,56 @@
                         <input type="number" id="ws" required value="0" min="0" step="0.01">
                     </div>
                 </div>
-                
                 <div class="info-box">
-                    <span>Total Stock: </span>
-                    <span id="total" class="font-bold text-lg">0 units</span>
+                    <span>Total Stock: </span><span id="total" class="font-bold text-lg">0 units</span>
                 </div>
-
-                <div style="display: flex; gap: 0.5rem;">
-                    <button type="submit" class="btn btn-primary" style="flex: 2;">Save Product</button>
-                    <button type="button" class="btn btn-secondary" onclick="clearForm()" style="flex: 1;">Clear</button>
+                <div style="display:flex; gap:0.5rem;">
+                    <button type="submit" class="btn btn-primary" style="flex:2;">Save Product</button>
+                    <button type="button" class="btn btn-secondary" onclick="clearForm()" style="flex:1;">Clear</button>
                 </div>
             </form>
         </div>
-
-        <div class="card" style="background: #f0fdf4;">
+        <div class="card" style="background:#f0fdf4;">
             <p class="text-sm text-muted">
-                <strong>Tip:</strong> This app works fully offline. All data is saved locally on your device.
+                <strong>Tip:</strong> This app works fully offline. All data is saved locally.
             </p>
         </div>
     </div>
 
-    <!-- View Page -->
     <div id="view" class="page">
         <div class="stats">
-            <div class="stat">
-                <h4>Products</h4>
-                <div id="st-products">0</div>
-            </div>
-            <div class="stat" style="border-color: var(--success);">
-                <h4>Total Bales</h4>
-                <div id="st-bales">0</div>
-            </div>
-            <div class="stat" style="border-color: var(--warning);">
-                <h4>Loose Units</h4>
-                <div id="st-units">0</div>
-            </div>
-            <div class="stat" style="border-color: var(--primary);">
-                <h4>Inventory Value</h4>
-                <div id="st-value">$0</div>
-            </div>
+            <div class="stat"><h4>Products</h4><div id="st-products">0</div></div>
+            <div class="stat" style="border-color:var(--success);"><h4>Total Bales</h4><div id="st-bales">0</div></div>
+            <div class="stat" style="border-color:var(--warning);"><h4>Loose Units</h4><div id="st-units">0</div></div>
+            <div class="stat" style="border-color:var(--primary);"><h4>Inventory Value</h4><div id="st-value">$0</div></div>
         </div>
 
         <div class="card">
             <div class="form-group">
-                <input type="text" id="search" placeholder="Search products..." onkeyup="search()" style="margin-bottom: 0;">
+                <input type="text" id="search" placeholder="Search products..." onkeyup="search()" style="margin-bottom:0;">
             </div>
-            
-            <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
-                <button class="btn btn-secondary" onclick="exportData()" style="margin: 0; flex: 1;">Export Data</button>
-                <button class="btn btn-secondary" onclick="document.getElementById('imp').click()" style="margin: 0; flex: 1;">Import Data</button>
-                <input type="file" id="imp" accept=".json" style="display: none;" onchange="importData(this)">
+            <div style="display:flex; gap:0.5rem; margin-bottom:1rem;">
+                <button class="btn btn-secondary" onclick="exportData()" style="flex:1;">Export Data</button>
+                <button class="btn btn-secondary" onclick="document.getElementById('imp').click()" style="flex:1;">Import Data</button>
+                <input type="file" id="imp" accept=".json" style="display:none;" onchange="importData(this)">
             </div>
-
-            <div style="overflow-x: auto;">
+            <div style="overflow-x:auto;">
                 <table>
-                    <thead>
-                        <tr>
-                            <th>Product</th>
-                            <th>Stock Level</th>
-                            <th>Prices</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
+                    <thead><tr><th>Product</th><th>Stock Level</th><th>Prices</th><th>Actions</th></tr></thead>
                     <tbody id="tbody"></tbody>
                 </table>
             </div>
-            <div id="empty" class="empty" style="display: none;">
-                No products added yet. Go to "Add Product" to create your first item.
+            <div id="empty" class="empty" style="display:none;">
+                No products added yet. Go to "Add Product" tab.
             </div>
         </div>
     </div>
 
-    <!-- Modal -->
     <div class="modal" id="modal" onclick="if(event.target===this)closeModal()">
         <div class="modal-content">
-            <h3 id="mtitle" style="margin-bottom: 0.5rem;">Transaction</h3>
-            <p id="mproduct" style="font-weight: 700; margin-bottom: 0.25rem;"></p>
-            <p id="mstock" class="text-muted text-sm" style="margin-bottom: 1rem;"></p>
+            <h3 id="mtitle">Transaction</h3>
+            <p id="mproduct" style="font-weight:700; margin:0.25rem 0;"></p>
+            <p id="mstock" class="text-muted text-sm" style="margin-bottom:1rem;"></p>
             
             <div class="sell-options" id="sopts">
                 <div class="sell-option selected" onclick="setType('unit')">
@@ -699,14 +240,14 @@
 
             <div class="form-group">
                 <label>Quantity</label>
-                <input type="number" id="mqty" value="1" min="1" style="text-align: center; font-size: 1.25rem; font-weight: 700;">
+                <input type="number" id="mqty" value="1" min="1" style="text-align:center; font-size:1.25rem; font-weight:700;">
             </div>
 
-            <p id="merror" style="color: var(--danger); display: none; margin-bottom: 1rem; font-size: 0.9rem;"></p>
+            <p id="merror" style="color:var(--danger); display:none; margin-bottom:1rem; font-size:0.9rem;"></p>
 
-            <div style="display: flex; gap: 0.5rem;">
-                <button class="btn btn-secondary" onclick="closeModal()" style="flex: 1; margin: 0;">Cancel</button>
-                <button class="btn btn-primary" onclick="doTx()" style="flex: 1; margin: 0;">Confirm</button>
+            <div style="display:flex; gap:0.5rem;">
+                <button class="btn btn-secondary" onclick="closeModal()" style="flex:1;">Cancel</button>
+                <button class="btn btn-primary" onclick="doTx()" style="flex:1;">Confirm</button>
             </div>
         </div>
     </div>
@@ -714,7 +255,9 @@
     <div class="toast" id="toast">Done</div>
 
     <script>
-        // ==================== DATA ====================
+        // ────────────────────────────────────────────────
+        //  DATA & CORE FUNCTIONS
+        // ────────────────────────────────────────────────
         let products = [];
         let current = null;
         let deferredPrompt = null;
@@ -729,78 +272,72 @@
         function save() {
             localStorage.setItem('ptp_data', JSON.stringify(products));
             updateStats();
-            render();
+            if (document.getElementById('view').classList.contains('active')) render();
         }
 
-        // ==================== INSTALL ====================
-        
-        window.addEventListener('beforeinstallprompt', (e) => {
+        // ────────────────────────────────────────────────
+        //  PWA / INSTALL / OFFLINE SUPPORT
+        // ────────────────────────────────────────────────
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                const CACHE_NAME = 'pricetrack-v1';
+                const urlsToCache = ['/'];
+
+                self.addEventListener('install', e => {
+                    e.waitUntil(
+                        caches.open(CACHE_NAME)
+                        .then(cache => cache.addAll(urlsToCache))
+                    );
+                });
+
+                self.addEventListener('activate', e => {
+                    e.waitUntil(
+                        caches.keys().then(keys =>
+                            Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+                        )
+                    );
+                });
+
+                self.addEventListener('fetch', e => {
+                    e.respondWith(
+                        caches.match(e.request)
+                        .then(resp => resp || fetch(e.request).catch(() => caches.match('/')))
+                    );
+                });
+            `;
+
+            const blob = new Blob([swCode], {type: 'application/javascript'});
+            const swUrl = URL.createObjectURL(blob);
+
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register(swUrl)
+                .then(reg => console.log('Service Worker registered (inline)', reg.scope))
+                .catch(err => console.error('Service Worker failed', err));
+            });
+        }
+
+        window.addEventListener('beforeinstallprompt', e => {
             e.preventDefault();
             deferredPrompt = e;
-            showInstallBtn();
-        });
-
-        let clickCount = 0;
-        document.addEventListener('click', () => {
-            clickCount++;
-            if (clickCount === 3 && products.length > 0 && !isStandalone()) {
-                showInstallBtn();
-            }
-        });
-
-        function isStandalone() {
-            return window.matchMedia('(display-mode: standalone)').matches || 
-                   window.navigator.standalone;
-        }
-
-        function showInstallBtn() {
-            if (isStandalone()) return;
             document.getElementById('installBtn').classList.add('show');
-        }
+        });
 
-        function tryInstall() {
+        document.getElementById('installBtn').onclick = () => {
             if (deferredPrompt) {
                 deferredPrompt.prompt();
-                deferredPrompt.userChoice.then((choice) => {
+                deferredPrompt.userChoice.then(choice => {
                     if (choice.outcome === 'accepted') {
-                        toast('App installed successfully');
-                        document.getElementById('installBtn').style.display = 'none';
+                        toast('App installed!');
+                        document.getElementById('installBtn').classList.remove('show');
                     }
                     deferredPrompt = null;
                 });
             } else {
                 showInstructions();
             }
-        }
+        };
 
         function showInstructions() {
-            const ua = navigator.userAgent.toLowerCase();
-            let steps = `
-                <li>Tap the <strong>menu button</strong> (three dots) in Chrome</li>
-                <li>Select <strong>"Add to Home screen"</strong></li>
-                <li>Tap <strong>"Add"</strong></li>
-            `;
-            
-            if (ua.includes('samsung')) {
-                steps = `
-                    <li>Tap <strong>menu</strong> (three dots)</li>
-                    <li>Select <strong>"Add page to"</strong></li>
-                    <li>Choose <strong>"Home screen"</strong></li>
-                `;
-            } else if (ua.includes('firefox')) {
-                steps = `
-                    <li>Tap <strong>menu</strong> (three dots)</li>
-                    <li>Select <strong>"Add to Home screen"</strong></li>
-                `;
-            } else if (/iphone|ipad|ipod/.test(ua)) {
-                steps = `
-                    <li>Tap <strong>Share button</strong> at bottom</li>
-                    <li>Scroll down and tap <strong>"Add to Home Screen"</strong></li>
-                    <li>Tap <strong>"Add"</strong></li>
-                `;
-            }
-            
-            document.getElementById('steps').innerHTML = steps;
             document.getElementById('instructions').classList.add('show');
             document.getElementById('overlay').classList.add('show');
         }
@@ -810,25 +347,25 @@
             document.getElementById('overlay').classList.remove('show');
         }
 
-        setTimeout(() => {
-            if (!isStandalone() && products.length > 0) {
-                showInstallBtn();
-            }
-        }, 8000);
+        function isStandalone() {
+            return window.matchMedia('(display-mode: standalone)').matches || navigator.standalone;
+        }
 
-        // ==================== APP ====================
+        // ────────────────────────────────────────────────
+        //  APP LOGIC
+        // ────────────────────────────────────────────────
         function calc() {
             const upb = parseInt(document.getElementById('upb').value) || 1;
             const b = parseInt(document.getElementById('bales').value) || 0;
             const u = parseInt(document.getElementById('units').value) || 0;
-            document.getElementById('total').textContent = `${(b * upb) + u} units (${b} bales + ${u} units)`;
+            document.getElementById('total').textContent = \`\${(b * upb) + u} units (\${b} bales + \${u} units)\`;
         }
 
         function saveProduct(e) {
             e.preventDefault();
             const p = {
                 id: Date.now(),
-                name: document.getElementById('name').value,
+                name: document.getElementById('name').value.trim(),
                 upb: parseInt(document.getElementById('upb').value) || 1,
                 bales: parseInt(document.getElementById('bales').value) || 0,
                 units: parseInt(document.getElementById('units').value) || 0,
@@ -837,9 +374,10 @@
                 balePrice: parseFloat(document.getElementById('balePrice').value) || 0,
                 ws: parseFloat(document.getElementById('ws').value) || 0
             };
+            if (!p.name) return toast('Please enter product name');
             products.push(p);
             save();
-            toast(`Saved: ${p.name}`);
+            toast(\`Saved: \${p.name}\`);
             clearForm();
         }
 
@@ -851,62 +389,53 @@
 
         function show(page) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-            document.querySelectorAll('.nav button').forEach((b, i) => {
-                b.classList.toggle('active', (page === 'add' && i === 0) || (page === 'view' && i === 1));
-            });
+            document.querySelectorAll('.nav button').forEach(b => b.classList.remove('active'));
             document.getElementById(page).classList.add('active');
+            document.querySelector(\`.nav button[onclick="show('${page}')"]\`).classList.add('active');
             if (page === 'view') {
                 updateStats();
                 render();
             }
         }
 
+        function total(p) { return (p.bales * p.upb) + p.units; }
+
         function formatStock(p) {
-            if (p.bales > 0 && p.units > 0) return `${p.bales} bales ${p.units} units`;
-            if (p.bales > 0) return `${p.bales} bales`;
-            if (p.units > 0) return `${p.units} units`;
+            if (p.bales > 0 && p.units > 0) return \`\${p.bales} bales \${p.units} units\`;
+            if (p.bales > 0) return \`\${p.bales} bales\`;
+            if (p.units > 0) return \`\${p.units} units\`;
             return 'Out of stock';
         }
 
-        function total(p) {
-            return (p.bales * p.upb) + p.units;
-        }
-
-        function render(list) {
-            const data = list || products;
+        function render(list = products) {
             const tb = document.getElementById('tbody');
-            
-            if (!data.length) {
+            document.getElementById('empty').style.display = list.length ? 'none' : 'block';
+            if (!list.length) {
                 tb.innerHTML = '';
-                document.getElementById('empty').style.display = 'block';
                 return;
             }
-            
-            document.getElementById('empty').style.display = 'none';
-            
-            tb.innerHTML = data.map(p => {
+            tb.innerHTML = list.map(p => {
                 const t = total(p);
-                const stockClass = t === 0 ? 'stock-low' : 'stock-ok';
-                
+                const cls = t === 0 ? 'stock-low' : 'stock-ok';
                 return `
                     <tr>
                         <td>
-                            <div class="font-bold">${esc(p.name)}</div>
-                            <div class="text-small text-muted">${p.upb} units per bale</div>
+                            <div class="font-bold">\${esc(p.name)}</div>
+                            <div class="text-small text-muted">\${p.upb} units/bale</div>
                         </td>
                         <td>
-                            <div class="${stockClass}">${formatStock(p)}</div>
-                            <div class="text-small text-muted">${t} total units</div>
+                            <div class="\${cls}">\${formatStock(p)}</div>
+                            <div class="text-small text-muted">\${t} total</div>
                         </td>
                         <td>
-                            <div class="tag">$${p.price.toFixed(2)} / unit</div>
-                            <div class="text-small text-muted mt-2">Bale: $${p.balePrice.toFixed(2)}</div>
+                            <div class="tag">\( {\` \)\{p.price.toFixed(2)}\`}/unit</div>
+                            <div class="text-small text-muted mt-2">Bale: \( {\` \)\{p.balePrice.toFixed(2)}\`}</div>
                         </td>
                         <td>
                             <div class="actions">
-                                <button class="btn-sell" onclick="sell(${p.id})" ${t === 0 ? 'disabled style="opacity:0.4"' : ''}>Sell</button>
-                                <button class="btn-add" onclick="restock(${p.id})">Add</button>
-                                <button class="btn-delete" onclick="del(${p.id})">Del</button>
+                                <button class="btn-sell" onclick="sell(\${p.id})" \${t===0?'disabled style="opacity:0.4"':''}>Sell</button>
+                                <button class="btn-add" onclick="restock(\${p.id})">Add</button>
+                                <button class="btn-delete" onclick="del(\${p.id})">Del</button>
                             </div>
                         </td>
                     </tr>
@@ -916,7 +445,7 @@
 
         function sell(id) {
             const p = products.find(x => x.id === id);
-            current = { id, type: 'sell', sellType: 'unit' };
+            current = {id, type:'sell', sellType:'unit'};
             document.getElementById('mtitle').textContent = 'Sell Product';
             document.getElementById('mproduct').textContent = p.name;
             document.getElementById('mstock').textContent = `Current stock: ${formatStock(p)}`;
@@ -929,7 +458,7 @@
 
         function restock(id) {
             const p = products.find(x => x.id === id);
-            current = { id, type: 'restock' };
+            current = {id, type:'restock'};
             document.getElementById('mtitle').textContent = 'Restock (Bales)';
             document.getElementById('mproduct').textContent = p.name;
             document.getElementById('mstock').textContent = `Current: ${formatStock(p)}`;
@@ -953,14 +482,13 @@
         function doTx() {
             const qty = parseInt(document.getElementById('mqty').value);
             const err = document.getElementById('merror');
-            const p = products.find(x => x.id === current.id);
-            
             if (!qty || qty < 1) {
-                err.textContent = 'Please enter a valid quantity';
+                err.textContent = 'Enter valid quantity';
                 err.style.display = 'block';
                 return;
             }
-            
+            const p = products.find(x => x.id === current.id);
+
             if (current.type === 'sell') {
                 if (current.sellType === 'unit') {
                     const avail = total(p);
@@ -970,21 +498,15 @@
                         return;
                     }
                     let rem = qty;
-                    if (p.units >= rem) {
-                        p.units -= rem;
-                    } else {
+                    if (p.units >= rem) p.units -= rem;
+                    else {
                         rem -= p.units;
                         p.units = 0;
                         while (rem > 0 && p.bales > 0) {
                             p.bales--;
                             p.units = p.upb;
-                            if (p.units >= rem) {
-                                p.units -= rem;
-                                rem = 0;
-                            } else {
-                                rem -= p.units;
-                                p.units = 0;
-                            }
+                            if (p.units >= rem) { p.units -= rem; rem = 0; }
+                            else { rem -= p.units; p.units = 0; }
                         }
                     }
                     toast(`Sold ${qty} units`);
@@ -1001,63 +523,60 @@
                 p.bales += qty;
                 toast(`Added ${qty} bales`);
             }
-            
             save();
             closeModal();
         }
 
         function updateStats() {
             document.getElementById('st-products').textContent = products.length;
-            document.getElementById('st-bales').textContent = products.reduce((a, p) => a + p.bales, 0);
-            document.getElementById('st-units').textContent = products.reduce((a, p) => a + p.units, 0);
-            const val = products.reduce((a, p) => a + (p.cost * total(p)), 0);
+            document.getElementById('st-bales').textContent = products.reduce((a,p)=>a+p.bales,0);
+            document.getElementById('st-units').textContent = products.reduce((a,p)=>a+p.units,0);
+            const val = products.reduce((a,p)=>a + p.cost * total(p),0);
             document.getElementById('st-value').textContent = '$' + val.toLocaleString();
         }
 
         function search() {
-            const term = document.getElementById('search').value.toLowerCase();
-            const filtered = term ? products.filter(p => p.name.toLowerCase().includes(term)) : products;
-            render(filtered);
+            const term = document.getElementById('search').value.toLowerCase().trim();
+            render(term ? products.filter(p => p.name.toLowerCase().includes(term)) : products);
         }
 
         function del(id) {
-            if (confirm('Delete this product?')) {
-                products = products.filter(p => p.id !== id);
-                save();
-                toast('Product deleted');
-            }
+            if (!confirm('Delete product?')) return;
+            products = products.filter(p => p.id !== id);
+            save();
+            toast('Product deleted');
         }
 
         function exportData() {
             const data = JSON.stringify(products, null, 2);
-            const blob = new Blob([data], { type: 'application/json' });
+            const blob = new Blob([data], {type:'application/json'});
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = `pricetrack-backup-${new Date().toISOString().split('T')[0]}.json`;
+            a.download = `pricetrack-${new Date().toISOString().split('T')[0]}.json`;
             a.click();
             URL.revokeObjectURL(url);
             toast('Data exported');
         }
 
-        function importData(inp) {
-            const f = inp.files[0];
-            if (!f) return;
-            const r = new FileReader();
-            r.onload = e => {
+        function importData(input) {
+            const file = input.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = e => {
                 try {
-                    const d = JSON.parse(e.target.result);
-                    if (Array.isArray(d)) {
-                        products = d;
+                    const data = JSON.parse(e.target.result);
+                    if (Array.isArray(data)) {
+                        products = data;
                         save();
-                        toast(`Imported ${d.length} products`);
+                        toast(`Imported ${data.length} products`);
                     }
-                } catch (err) { 
-                    alert('Invalid file format'); 
+                } catch(err) {
+                    alert('Invalid JSON file');
                 }
-                inp.value = '';
             };
-            r.readAsText(f);
+            reader.readAsText(file);
+            input.value = '';
         }
 
         function esc(t) {
@@ -1066,19 +585,21 @@
             return d.innerHTML;
         }
 
-        function toast(m) {
+        function toast(msg) {
             const t = document.getElementById('toast');
-            t.textContent = m;
+            t.textContent = msg;
             t.classList.add('show');
-            setTimeout(() => t.classList.remove('show'), 2500);
+            setTimeout(() => t.classList.remove('show'), 2400);
         }
 
+        // Init
         load();
         calc();
-        
-        if (products.length > 0) {
-            setTimeout(showInstallBtn, 6000);
-        }
+        setTimeout(() => {
+            if (products.length > 0 && !isStandalone()) {
+                document.getElementById('installBtn').classList.add('show');
+            }
+        }, 5000);
     </script>
 </body>
 </html>
